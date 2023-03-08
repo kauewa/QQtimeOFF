@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import Inicio from "./pages/inicio";
+import Login from "./pages/login";
+import Gestor from "./pages/gestor";
+import Colaborador from "./pages/colaborador";
 
+//Pesquisar mais sobre as rotas, mas depois que tiver todo o resto pronto//////////////
+
+//Rotas
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Inicio />}/>
+        <Route path="/loginColaborador" element={<Login usuario='colaborador'/>}/>
+        <Route path="/loginGestor" element={<Login usuario='gestor'/>}/>
+        <Route path="/colaborador" element={<Colaborador />}/>
+        <Route path="/gestor" element={<Gestor />}/>
+        <Route path="/gestor/colaborador/:id" element={<Gestor />}/>
+        <Route path="/gestor/cadastro" element={<Gestor />}/>
+        <Route path="/gestor/disponiveis" element={<Gestor />}/>
+        <Route path="/gestor/aceitos" element={<Gestor />}/>
+        <Route path="/gestor/ferias" element={<Gestor />}/>
+        <Route path="/gestor/atrasos" element={<Gestor />}/>
+        <Route path="/gestor/solicitacoes" element={<Gestor />}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
