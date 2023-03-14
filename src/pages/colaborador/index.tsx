@@ -6,7 +6,7 @@ import { ContainerLateralColaborador, Main } from "../../Components/Divisões/Se
 import { H1 } from "../../Components/texto/textos";
 import { HeadCadastroSolicitacao } from "./styles";
 import { Switch, TextField } from '@mui/material';
-import { Div } from '../../Components/Divisões/div';
+import { DivColuna } from '../../Components/Divisões/div';
 import { ButtonSmall } from '../../Components/inputs/inputs';
 import { useState } from 'react';
 import { Dayjs } from 'dayjs';
@@ -25,12 +25,12 @@ export default function Colaborador(){
             <Cadastrar>
                 <HeadCadastroSolicitacao>
                     <h1>Kauê Wandscher</h1>
-                    <Div>
+                    <DivColuna tamanho=''>
                         <h1>Dev Junior</h1>
                         <h1>CLT</h1>
-                    </Div>
+                    </DivColuna>
                 </HeadCadastroSolicitacao>
-                <Div>
+                <DivColuna tamanho=''>
                     <h1>Inicio</h1>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker format="DD/MM/YYYY" value={value} onChange={(newValue) => {
@@ -38,16 +38,16 @@ export default function Colaborador(){
                                 console.log(value);
                                 }} />
                     </LocalizationProvider>
-                </Div>
-                <Div>
+                </DivColuna>
+                <DivColuna tamanho=''>
                     <h1>Quantidade de dias</h1>
                     <TextField type="number" placeholder='dias'/>
-                </Div>
-                <Div>
+                </DivColuna>
+                <DivColuna tamanho=''>
                     <h1>Décimo terceiro</h1>
                     <Switch  />
-                </Div>
-                <ButtonSmall size='large'>
+                </DivColuna>
+                <ButtonSmall cor='' size='large'>
                     Solicitar
                 </ButtonSmall>
                 

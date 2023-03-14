@@ -16,7 +16,7 @@ export const Main = styled.section`
 
 
 const SectionLateral = styled.section`
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

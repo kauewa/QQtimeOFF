@@ -18,7 +18,7 @@ export default function Login({ usuario }:InicioProps){
                 <H1>Entrar</H1>
                 <TextField id='email' placeholder='Email'/>
                 <TextField id='senha' placeholder='Senha'/>
-                <Link to={usuario === 'gestor'? '/gestor' : '/colaborador'}><ButtonSmall size=''>Entrar</ButtonSmall></Link>
+                <Link to={usuario === 'gestor'? '/gestor' : '/colaborador'}><ButtonSmall cor='' size=''>Entrar</ButtonSmall></Link>
             </SectionInicio>
         </MainInicio>
             

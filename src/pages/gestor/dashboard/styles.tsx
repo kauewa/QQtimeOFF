@@ -2,19 +2,23 @@ import { createTheme } from "@mui/material/styles";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
- //Head
+ //////////////////////////////////// 
 export const MainDashboard = styled.section`
     display: flex;
     width: 100%;
     justify-content: space-around;
     margin-top: 16px;
 `;
+/////////////////////////////////////
+
+
 
 export const DivTopo = styled.div`
     display: flex;
     justify-content: space-between;
     width: 60%;
 `;
+
 export const AddColaborador = styled.div`
     display: flex;
     margin-left: 24px;
@@ -49,7 +53,7 @@ export const AddColaborador = styled.div`
 `;
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Lista Equipe
+////////////////////////////////////// Lista Equipe DASHBOARD
 export const SectionEquipe = styled.section`
     display: flex;
     flex-direction: column;
@@ -77,7 +81,7 @@ export const DivColaborador = styled.div`
 `;
 ////////////////////////////////////////////////////////////
 
-//Calendário
+////////////////////////////////////////Calendário
 export const Theme = createTheme({
     palette: {
       primary: {
@@ -93,7 +97,7 @@ export const Theme = createTheme({
   });
 //////////////////////////////////////////
 
-//Filtros
+////////////////////////////////Filtros
 const DivStatus = styled.div`
     display: flex;
     flex-direction: column;
@@ -112,12 +116,12 @@ interface DivStatusPequenosProps{
     cor: string;
 }
 
-const TxtStatus = styled.h1<DivStatusPequenosProps>`
+export const TxtStatus = styled.h1<DivStatusPequenosProps>`
     color: ${props => props.cor === 'ativo' ? 'var(--fundo-secundario)' : 'var(--branco)'};
     font-weight: 900;
 `;
 
-const NumStatus = styled(TxtStatus)`
+export const NumStatus = styled(TxtStatus)`
     font-size: 42px;
 `;
 
@@ -136,7 +140,7 @@ const DivStatusPequenos = styled.div<DivStatusPequenosProps>`
     }
 `;
 
-const DivStatusGrande = styled.div`
+export const DivStatusGrande = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;

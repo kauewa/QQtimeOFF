@@ -6,11 +6,12 @@ font-size: 36px;
 `;
 
 interface h1StatusProps{
+    tamanho: string;
     status: string;
 }
 
-export const Hcolor = styled.h1<h1StatusProps>`
-    font-size: 21px;
+export const Hcolor = styled(H1)<h1StatusProps>`
+    font-size: ${props => props.tamanho};
     color: ${props => props.status === 'Disponivel' ? 'var(--verde-forte)' : 
     (props.status === 'Aceito' ? 'var(--amarelo-forte)' : 
     (props.status === 'Ferias' ? 'var(--laranja)' : 

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Colaborador, colaboradores} from "../modeloColaboradores";
+import { Colaborador, colaboradores} from "../../../Entity/modeloColaboradores";
 import { H1, Hcolor } from "../../../Components/texto/textos";
-import { MainDashboard, AddColaborador, DivTopo, DivColaborador, SectionEquipe, SectionStatus, Theme } from "./styles";
+import { MainDashboard, AddColaborador, DivColaborador, SectionEquipe, SectionStatus, Theme, DivTopo } from "./styles";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ThemeProvider } from "@mui/material/styles";
@@ -32,9 +32,9 @@ export default function Dashboard(){
                     {colaboradoresFiltrados.map((item) => (
                         <Link to={`${localizacao.pathname.split('/').slice(0, -1).join('/')}/colaborador/${item.id}`}>
                             <DivColaborador key={item.id}>
-                                <Hcolor status={item.status}>{item.nome}</Hcolor>
-                                <Hcolor status={item.status}>{item.funcao}</Hcolor>
-                                <Hcolor status={item.status}>{item.status}</Hcolor>
+                                <Hcolor tamanho="21px" status={item.status}>{item.nome}</Hcolor>
+                                <Hcolor tamanho="21px" status={item.status}>{item.funcao}</Hcolor>
+                                <Hcolor tamanho="21px" status={item.status}>{item.status}</Hcolor>
                             </DivColaborador>
                         </Link>
                     ))}
@@ -47,9 +47,9 @@ export default function Dashboard(){
                     {colaboradores.map((item) => (
                         <Link to={`colaborador/${item.id}`}>
                             <DivColaborador key={item.id}>
-                                <Hcolor status={item.status}>{item.nome}</Hcolor>
-                                <Hcolor status={item.status}>{item.funcao}</Hcolor>
-                                <Hcolor status={item.status}>{item.status}</Hcolor>
+                                <Hcolor tamanho="21px" status={item.status}>{item.nome}</Hcolor>
+                                <Hcolor tamanho="21px" status={item.status}>{item.funcao}</Hcolor>
+                                <Hcolor tamanho="21px" status={item.status}>{item.status}</Hcolor>
                             </DivColaborador>
                         </Link>
                     ))}

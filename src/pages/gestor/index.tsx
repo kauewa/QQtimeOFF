@@ -3,7 +3,7 @@ import { ContainerLateralGestor, Main } from "../../Components/Divisões/Section
 import CadastrarColaborador from "./cadastro";
 import Dashboard from "./dashboard";
 import GestorColaborador from "./gColaborador";
-import Solicitacoes from "./solicitacao";
+import Solicitacoes from "./solicitacoes";
 
 
 //O centro de todo o gestor

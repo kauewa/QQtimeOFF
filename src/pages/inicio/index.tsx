@@ -11,8 +11,8 @@ export default function Inicio(){
         <MainInicio>
             <img src={Logo} alt='logo'/>
             <SectionInicio>
-                <Link to='/loginColaborador'><ButtonSmall size='large'>Colaborador</ButtonSmall></Link>
-                <Link to='/loginGestor'><ButtonSmall size='large'>Gestor</ButtonSmall></Link>
+                <Link to='/loginColaborador'><ButtonSmall cor='' size='large'>Colaborador</ButtonSmall></Link>
+                <Link to='/loginGestor'><ButtonSmall cor='' size='large'>Gestor</ButtonSmall></Link>
             </SectionInicio>
         </MainInicio>
             

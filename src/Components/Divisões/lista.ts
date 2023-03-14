@@ -1,16 +1,19 @@
 import styled from "styled-components";
 
+interface ListaProps{
+    tamaho: string;
+}
 
-export const ListaSolicitações = styled.section`
+export const Lista = styled.section<ListaProps>`
     display: flex;
     flex-direction: column;
     background: var(--branco);
     border: solid 1px;
     box-shadow: 0px 0px 4px #000000;
     border-radius: 50px;
-    width: 70%;
-    height: 50em;
-    margin: 30px auto auto auto;
+    width: ${props => props.tamaho === 'large' ? '70%' : '100%' };
+    height: ${props => props.tamaho === 'large' ? '50em' : '20em' };
+    margin: ${props => props.tamaho === 'large' ? '30px auto' : '20px 1px'};
     overflow: auto;
 `;
 
