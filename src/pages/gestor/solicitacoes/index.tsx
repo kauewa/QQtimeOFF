@@ -1,31 +1,70 @@
-import { HeadItem, HeadLista, Lista } from "../../../Components/Divisões/lista";
+import { Link } from "react-router-dom";
+import { HeadTipo, HeadLista, Lista, Item, ItemTipo } from "../../../Components/Divisões/lista";
 import { H1 } from "../../../Components/texto/textos";
+import { Solicitacao, solicitacoes, StatusSolicitacao } from "../../../Entity/modeloSolicitacao";
+
 
 
 //Fazer ainda
 export default function Solicitacoes(){
+    
+    const ListarSolicitações = () => {
+        const filtroSolicitações: Solicitacao[] = solicitacoes.filter((sol) => sol.confirmacao_gestor === StatusSolicitacao.pendente) 
+        return(
+            <>
+                {filtroSolicitações.map(sol => (
+                    <Link to={`/gestor/solicitacoes/${sol.id}`}>
+                        <Item>
+                            <ItemTipo tamanho="20%">
+                                <h1>NOME</h1>
+                            </ItemTipo>
+                            <ItemTipo tamanho="20%">
+                                <h1>{sol.inicio_ferias.format('DD/MM/YYYY')}</h1>
+                            </ItemTipo>
+                            <ItemTipo tamanho="20%">
+                                <h1>{sol.qtd_dias}</h1>
+                            </ItemTipo>
+                            <ItemTipo tamanho="20%">
+                                <h1>Disponível</h1>
+                            </ItemTipo>
+                            <ItemTipo tamanho="20%">
+                                <h1>1</h1>
+                            </ItemTipo>
+                        </Item>
+                    </Link>
+                ))}
+            </>
+            
+        )
+    }
+    
+    
+    
+    
+    
+    
     return(
         <>
             <H1>Solicitações</H1>
-            <Lista tamaho="large">
+            <Lista tamanho="large">
                 <HeadLista>
-                    <HeadItem>
+                    <HeadTipo tamanho="20%">
                         <h1>Nome</h1>
-                    </HeadItem>
-                    <HeadItem>
+                    </HeadTipo>
+                    <HeadTipo tamanho="20%">
                         <h1>Inicio</h1>
-                    </HeadItem>
-                    <HeadItem>
+                    </HeadTipo>
+                    <HeadTipo tamanho="20%">
                         <h1>Quantidade</h1>
-                    </HeadItem>
-                    <HeadItem>
+                    </HeadTipo>
+                    <HeadTipo tamanho="20%">
                         <h1>Colaborador relacionado</h1>   
-                    </HeadItem>
-                    <HeadItem>
+                    </HeadTipo>
+                    <HeadTipo tamanho="20%">
                         <h1>Confirmar</h1>
-                    </HeadItem>
+                    </HeadTipo>
                 </HeadLista>
-
+                {ListarSolicitações()}
             </Lista>
         </>
         

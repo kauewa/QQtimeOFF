@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
-import { Solicitacao, StatusSolicitacao } from "../modeloSolicitacao";
+import { Solicitacao, solicitacoes, StatusSolicitacao } from "../modeloSolicitacao";
 
 // Classe colaborador
 export interface Colaborador{
@@ -30,7 +30,7 @@ const colaborador1: Colaborador = {
   clt: true,
   saldo_ferias: 30,
   senha: 'senha123',
-  solicitacoes: [],
+  solicitacoes: [solicitacoes[0]],
   ferias: null,
   status: 'Aceito',
   funcao: 'programador'
@@ -47,7 +47,7 @@ const colaborador2: Colaborador = {
   clt: true,
   saldo_ferias: 0,
   senha: 'senha456',
-  solicitacoes: [],
+  solicitacoes: [solicitacoes[1]],
   ferias: null,
   status: 'Atraso',
   funcao: 'analista'
@@ -64,7 +64,7 @@ const colaborador3: Colaborador = {
   clt: true,
   saldo_ferias: 0,
   senha: 'senha789',
-  solicitacoes: [],
+  solicitacoes: [solicitacoes[2]],
   ferias: null,
   status: 'Ferias',
   funcao: 'designer'
@@ -81,7 +81,7 @@ const colaborador4: Colaborador = {
   clt: true,
   saldo_ferias: 0,
   senha: 'senhaabc',
-  solicitacoes: [],
+  solicitacoes: [solicitacoes[3], solicitacoes[4]],
   ferias: null,
   status: 'Disponivel',
   funcao: 'dev'

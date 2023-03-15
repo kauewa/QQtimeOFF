@@ -3,6 +3,7 @@ import { ContainerLateralGestor, Main } from "../../Components/Divisões/Section
 import CadastrarColaborador from "./cadastro";
 import Dashboard from "./dashboard";
 import GestorColaborador from "./gColaborador";
+import Solicitacao from "./solicitacao";
 import Solicitacoes from "./solicitacoes";
 
 
@@ -18,7 +19,8 @@ export default function Gestor(){
                 {/* verificação da rota */}
                 {localizacao.pathname === '/gestor/solicitacoes' ? (<Solicitacoes/>) : 
                 (localizacao.pathname === '/gestor/cadastro' ? (<CadastrarColaborador/>): 
-                (localizacao.pathname === `/gestor/colaborador/${id}` ? (<GestorColaborador/>):  <Dashboard/>))}
+                (localizacao.pathname === `/gestor/colaborador/${id}` ? (<GestorColaborador/>): 
+                (localizacao.pathname === `/gestor/solicitacoes/${id}` ? (<Solicitacao/>):  <Dashboard/>)))}
             </Main>
         </>
     )

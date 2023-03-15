@@ -17,6 +17,7 @@ function App() {
         <Route path="/colaborador" element={<Colaborador />}/>
         <Route path="/gestor" element={<Gestor />}/>
         <Route path="/gestor/colaborador/:id" element={<Gestor />}/>
+        <Route path="/gestor/solicitacoes/:id" element={<Gestor />}/>
         <Route path="/gestor/cadastro" element={<Gestor />}/>
         <Route path="/gestor/disponiveis" element={<Gestor />}/>
         <Route path="/gestor/aceitos" element={<Gestor />}/>

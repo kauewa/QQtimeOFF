@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface ListaProps{
-    tamaho: string;
+    tamanho: string;
 }
 
 export const Lista = styled.section<ListaProps>`
@@ -11,10 +11,10 @@ export const Lista = styled.section<ListaProps>`
     border: solid 1px;
     box-shadow: 0px 0px 4px #000000;
     border-radius: 50px;
-    width: ${props => props.tamaho === 'large' ? '70%' : '100%' };
-    height: ${props => props.tamaho === 'large' ? '50em' : '20em' };
-    margin: ${props => props.tamaho === 'large' ? '30px auto' : '20px 1px'};
-    overflow: auto;
+    width: ${props => props.tamanho === 'large' ? '70%' : '80%' };
+    height: ${props => props.tamanho === 'large' ? '50em' : '20em' };
+    margin: ${props => props.tamanho === 'large' ? '30px auto' : '20px 1px'};
+    overflow: scroll;
 `;
 
 export const HeadLista = styled.div`
@@ -26,11 +26,26 @@ export const HeadLista = styled.div`
 
 `;
 
-export const HeadItem = styled.div`
+export const HeadTipo = styled.div<ListaProps>`
     display: flex;
     justify-content: center;
     align-items: center;
+    width: ${props => props.tamanho};
     height: 100%;
-    flex-grow: 1;
     border-right: solid 1px;
+    overflow: auto;
+`;
+
+export const Item = styled(HeadLista)`
+    background: transparent;
+    height: 4em;
+
+    &:hover{
+        background: var(--fundo);
+    }
+`;
+
+export const ItemTipo = styled(HeadTipo)`
+    border-right: none;
+
 `;

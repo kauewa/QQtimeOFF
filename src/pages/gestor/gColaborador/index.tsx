@@ -2,7 +2,7 @@ import { Switch, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DivHorizontal, Head, Conteudo } from '../../../Components/Divisões/div';
-import { HeadItem, HeadLista, Lista } from '../../../Components/Divisões/lista';
+import { HeadTipo, HeadLista, Lista } from '../../../Components/Divisões/lista';
 import { PerfilFoto } from '../../../Components/Divisões/SectionLateral';
 import { ButtonSmall } from '../../../Components/inputs/inputs';
 import { Hcolor } from '../../../Components/texto/textos';
@@ -14,10 +14,6 @@ import { DivStatusGrande, NumStatus, TxtStatus } from '../dashboard/styles';
 // Página do perfil de colaborador
 export default function GestorColaborador(){
     const navigate = useNavigate();
-    
-
-    ///////////Passar alterações para o colaborador
-    ////////////botao de excluir
 
     const {id} = useParams<{id: string}>();
     const colaborador = colaboradores.find((colab) => colab.id === id);
@@ -58,30 +54,33 @@ export default function GestorColaborador(){
                 <DivHorizontal tamanho='100%'>
                 <DivHorizontal tamanho='45%'>
                     <Hcolor status='Disponivel' tamanho='16px'>Solicitações</Hcolor>
-                    <Lista tamaho=''>
+                    <Lista tamanho=''>
                         <HeadLista>
-                            <HeadItem>
+                            <HeadTipo tamanho="25%">
+                                <h1>Criado</h1>
+                            </HeadTipo>
+                            <HeadTipo tamanho="25%">
                                 <h1>Inicio</h1>
-                            </HeadItem>
-                            <HeadItem>
+                            </HeadTipo>
+                            <HeadTipo tamanho="25%">
                                 <h1>Quantidade</h1>
-                            </HeadItem>
-                            <HeadItem>
+                            </HeadTipo>
+                            <HeadTipo tamanho="25%">
                                 <h1>Status</h1>
-                            </HeadItem>
+                            </HeadTipo>
                         </HeadLista>
                     </Lista>
                     </DivHorizontal>
                     <DivHorizontal tamanho='45%'>
                     <Hcolor status='Disponivel' tamanho='16px'>Relacionados</Hcolor>
-                    <Lista tamaho=''>
+                    <Lista tamanho=''>
                         <HeadLista>
-                            <HeadItem>
+                            <HeadTipo tamanho='50%'>
                                 <h1>Nome</h1>
-                            </HeadItem>
-                            <HeadItem>
+                            </HeadTipo>
+                            <HeadTipo tamanho='50%'>
                                 <h1>Status</h1>
-                            </HeadItem>
+                            </HeadTipo>
                         </HeadLista>
                     </Lista>
                     

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { ButtonSmall } from '../../../Components/inputs/inputs';
-import { Cadastrar } from '../../../Components/Divisões/SectionCadastro';
 import { Colaborador, adicionarColaborador } from '../../../Entity/modeloColaboradores';
 import { useNavigate } from 'react-router-dom';
-import { Switch } from '@mui/material';
+import { MenuItem, Select, Switch } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import { DivHorizontal } from '../../../Components/Divisões/div';
+import { Conteudo, DivHorizontal, Cadastrar } from '../../../Components/Divisões/div';
 
 
 ///////////////////// Deixar mais explicativo para cadastro principalmente CLT E O GESTOR
@@ -21,7 +20,7 @@ export default function CadastrarColaborador() {
   const [email, setEmail] = useState('');
   const [inicio, setInicio] = useState<Dayjs | null>(dayjs());
   const [gestor, setGestor] = useState(false);
-  const [clt, setClt] = useState(false);
+  const [clt, setClt] = useState(true);
   const [funcao, setFuncao] = useState('');
   const [senha, setSenha] = useState('');
 
@@ -51,6 +50,11 @@ export default function CadastrarColaborador() {
   return (
     <>
       <h1>Cadastrar Colaborador</h1>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <Conteudo>
       <Cadastrar>
         <DivHorizontal tamanho='100%'>
           <TextField
@@ -94,13 +98,14 @@ export default function CadastrarColaborador() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setGestor(e.target.checked); console.log(e.target.checked)}}
           inputProps={{ 'aria-label': 'controlled' }}
         />
-        <h1>CLT</h1>
-        <Switch
-          checked={clt}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setClt(e.target.checked)}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        
+        <h1>Tipo de contrato</h1>
+        <Select
+        value={clt}
+        onChange={(event) => setClt(event.target.value === '1')}
+        >
+          <MenuItem value={'1'}>CLT</MenuItem>  
+          <MenuItem value={'0'}>PJ</MenuItem>
+        </Select>        
         <TextField
           id="senha"
           label="Senha"
@@ -113,6 +118,7 @@ export default function CadastrarColaborador() {
           Cadastrar
         </ButtonSmall>
       </Cadastrar>
+      </Conteudo>
     </>
   );
 }

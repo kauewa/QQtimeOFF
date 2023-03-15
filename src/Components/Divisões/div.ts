@@ -54,3 +54,13 @@ export const DivHorizontal = styled.div<Tamanho>`
     justify-content: space-between;
     
 `;
+
+export const Cadastrar = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+`;
