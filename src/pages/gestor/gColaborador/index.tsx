@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DivHorizontal, Head, Conteudo } from '../../../Components/Divisões/div';
 import { HeadTipo, HeadLista, Lista } from '../../../Components/Divisões/lista';
-import { PerfilFoto } from '../../../Components/Divisões/SectionLateral';
-import { ButtonSmall } from '../../../Components/inputs/inputs';
-import { Hcolor } from '../../../Components/texto/textos';
+import { PerfilFoto } from '../../../Components/Divisões/pg2';
+import { ButtonSmall } from '../../../Components/botao';
+import { Hcolor, Hstatus } from '../../../Components/texto';
 import { colaboradores } from '../../../Entity/modeloColaboradores';
-import { DivStatusGrande, NumStatus, TxtStatus } from '../dashboard/styles';
+import { DivStatusGrande } from '../dashboard/styles';
 
 
 
@@ -38,12 +38,12 @@ export default function GestorColaborador(){
             <Head>
                 <DivHorizontal tamanho=''>
                     <PerfilFoto tamanho=''/>
-                    <Hcolor status={colaborador.status} tamanho='36px'>{colaborador.nome}</Hcolor>
+                    <Hstatus cor={colaborador.status} tamanho='36px'>{colaborador.nome}</Hstatus>
                 </DivHorizontal>
                 <DivHorizontal tamanho='200px'>
                 <DivStatusGrande>
-                    <TxtStatus cor=''>Saldo férias</TxtStatus>
-                    <NumStatus cor=''>{colaborador.saldo_ferias}</NumStatus>
+                    <Hcolor tamanho='' cor=''>Saldo férias</Hcolor>
+                    <Hcolor tamanho='42px' cor=''>{colaborador.saldo_ferias}</Hcolor>
                 </DivStatusGrande>
                 </DivHorizontal>
                 
@@ -53,7 +53,7 @@ export default function GestorColaborador(){
                 <h1>Fim periodo aquisitivo: {colaborador.fim_aquisitivo.format('DD/MM/YYYY')}</h1>
                 <DivHorizontal tamanho='100%'>
                 <DivHorizontal tamanho='45%'>
-                    <Hcolor status='Disponivel' tamanho='16px'>Solicitações</Hcolor>
+                    <Hstatus cor='Disponivel' tamanho='16px'>Solicitações</Hstatus>
                     <Lista tamanho=''>
                         <HeadLista>
                             <HeadTipo tamanho="25%">
@@ -72,7 +72,7 @@ export default function GestorColaborador(){
                     </Lista>
                     </DivHorizontal>
                     <DivHorizontal tamanho='45%'>
-                    <Hcolor status='Disponivel' tamanho='16px'>Relacionados</Hcolor>
+                    <Hstatus cor='Disponivel' tamanho='16px'>Relacionados</Hstatus>
                     <Lista tamanho=''>
                         <HeadLista>
                             <HeadTipo tamanho='50%'>

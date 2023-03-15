@@ -1,8 +1,8 @@
 import { TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { ButtonSmall } from '../../Components/inputs/inputs';
-import { MainInicio, SectionInicio } from '../../Components/Divisões/SectionInicio';
-import { H1 } from '../../Components/texto/textos';
+import { ButtonSmall } from '../../Components/botao';
+import { MainInicio, SectionInicio } from '../../Components/Divisões/pg1';
+import { H1 } from '../../Components/texto';
 
 const Logo: any = require('../../assets/TimeOFF.png');
 interface InicioProps{

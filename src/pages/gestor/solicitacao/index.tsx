@@ -2,8 +2,8 @@ import { TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Conteudo, DivColuna, DivHorizontal, Head } from "../../../Components/Divisões/div";
 import { HeadLista, HeadTipo, Lista } from "../../../Components/Divisões/lista";
-import { ButtonSmall } from "../../../Components/inputs/inputs";
-import { H1, Hcolor } from "../../../Components/texto/textos";
+import { ButtonSmall } from "../../../Components/botao";
+import { H1, Hstatus } from "../../../Components/texto";
 import { solicitacoes } from "../../../Entity/modeloSolicitacao";
 
 export default function Solicitacao(){
@@ -14,7 +14,7 @@ export default function Solicitacao(){
         <Head>
             <H1>Nome</H1>
             <DivColuna tamanho="">
-                <Hcolor tamanho="35px" status="Disponivel">Dev</Hcolor>
+                <Hstatus tamanho="35px" cor="Disponivel">Dev</Hstatus>
                 <h1>CLT</h1>
             </DivColuna>
         </Head>

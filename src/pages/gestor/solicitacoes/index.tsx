@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { HeadTipo, HeadLista, Lista, Item, ItemTipo } from "../../../Components/Divisões/lista";
-import { H1 } from "../../../Components/texto/textos";
+import { H1 } from "../../../Components/texto";
 import { Solicitacao, solicitacoes, StatusSolicitacao } from "../../../Entity/modeloSolicitacao";
 
 

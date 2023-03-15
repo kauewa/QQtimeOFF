@@ -1,23 +1,23 @@
 import { createTheme } from "@mui/material/styles";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { Hcolor } from "../../../Components/texto";
 
- //////////////////////////////////// 
+
+//////////////////////////////////// Divisão
 export const MainDashboard = styled.section`
     display: flex;
     width: 100%;
     justify-content: space-around;
     margin-top: 16px;
 `;
-/////////////////////////////////////
-
-
 
 export const DivTopo = styled.div`
     display: flex;
     justify-content: space-between;
     width: 60%;
 `;
+/////////////////////////////////////
 
 export const AddColaborador = styled.div`
     display: flex;
@@ -39,16 +39,15 @@ export const AddColaborador = styled.div`
         top: 0;
         font-size: 14px;
         padding: 5px;
-        color: var(--verde-forte);
         transition: all 300ms ease-in-out; /* adicionar uma transição suave */
       }
     
       &:hover::before {
-        left: 80px; /* ajustar a posição do texto para o outro lado */
+        left: 80px;
       }
 
     &:hover{
-        transform: scale(1.04);
+        background: var(--fundo-secundario);
     }
 `;
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,17 +83,17 @@ export const DivColaborador = styled.div`
 ////////////////////////////////////////Calendário
 export const Theme = createTheme({
     palette: {
-      primary: {
-        main: '#008000', 
-      },
-      secondary: {
-        main: '#E1FFCA', 
-      },
-      background: {
-        default: '#fff',
-      }
+        primary: {
+            main: '#008000',
+        },
+        secondary: {
+            main: '#E1FFCA',
+        },
+        background: {
+            default: '#fff',
+        }
     },
-  });
+});
 //////////////////////////////////////////
 
 ////////////////////////////////Filtros
@@ -112,25 +111,16 @@ const DivStatusDentro = styled.div`
     width: 100%;
 `;
 
-interface DivStatusPequenosProps{
+interface DivStatusPequenosProps {
     cor: string;
 }
-
-export const TxtStatus = styled.h1<DivStatusPequenosProps>`
-    color: ${props => props.cor === 'ativo' ? 'var(--fundo-secundario)' : 'var(--branco)'};
-    font-weight: 900;
-`;
-
-export const NumStatus = styled(TxtStatus)`
-    font-size: 42px;
-`;
 
 const DivStatusPequenos = styled.div<DivStatusPequenosProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 12px;
-    background: ${props => props.cor === 'verde' ? 'var(--verde-forte)' : (props.cor === 'amarelo' ? 'var(--amarelo-forte)' : (props.cor === 'laranja' ? 'var(--laranja)': 'red'))};
+    background: ${props => props.cor === 'verde' ? 'var(--verde-forte)' : (props.cor === 'amarelo' ? 'var(--amarelo-forte)' : (props.cor === 'laranja' ? 'var(--laranja)' : 'red'))};
     width: 131px;
     height: 100px;
     border-radius: 36px;
@@ -139,6 +129,7 @@ const DivStatusPequenos = styled.div<DivStatusPequenosProps>`
         filter: drop-shadow(0px 0px 7px #BBFF84);
     }
 `;
+
 
 export const DivStatusGrande = styled.div`
     display: flex;
@@ -156,7 +147,7 @@ export const DivStatusGrande = styled.div`
     }
 `;
 
-interface StatusProps{
+interface StatusProps {
     numDisp: number;
     numAceito: number;
     numFerias: number;
@@ -165,43 +156,43 @@ interface StatusProps{
 }
 
 // Filtros da página dashboard
-export function SectionStatus( {numDisp, numAceito, numFerias, numAtraso, numGeral}: StatusProps){
+export function SectionStatus({ numDisp, numAceito, numFerias, numAtraso, numGeral }: StatusProps) {
     const localizacao = useLocation();
 
-    return(
+    return (
         <DivStatus>
             <DivStatusDentro>
                 <Link to='/gestor/disponiveis'>
                     <DivStatusPequenos cor='verde'>
-                        <TxtStatus cor={localizacao.pathname === '/gestor/disponiveis' ? 'ativo' : ''}>Disponíveis</TxtStatus>
-                        <NumStatus cor={localizacao.pathname === '/gestor/disponiveis' ? 'ativo' : ''} >{numDisp}</NumStatus>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/disponiveis' ? 'var(--fundo)' : 'var(--branco)'}>Disponíveis</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/disponiveis' ? 'var(--fundo)' : 'var(--branco)'} >{numDisp}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
                 <Link to='/gestor/aceitos'>
                     <DivStatusPequenos cor='amarelo'>
-                        <TxtStatus cor={localizacao.pathname === '/gestor/aceitos' ? 'ativo' : ''}>Aceitos</TxtStatus>
-                        <NumStatus cor={localizacao.pathname === '/gestor/aceitos' ? 'ativo' : ''}>{numAceito}</NumStatus>
-                    </DivStatusPequenos>       
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/aceitos' ? 'var(--fundo)' : 'var(--branco)'}>Aceitos</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/aceitos' ? 'var(--fundo)' : 'var(--branco)'}>{numAceito}</Hcolor>
+                    </DivStatusPequenos>
                 </Link>
             </DivStatusDentro>
             <DivStatusDentro>
                 <Link to='/gestor/ferias'>
                     <DivStatusPequenos cor='laranja'>
-                        <TxtStatus cor={localizacao.pathname === '/gestor/ferias' ? 'ativo' : ''}>Férias</TxtStatus>
-                        <NumStatus cor={localizacao.pathname === '/gestor/ferias' ? 'ativo' : ''}>{numFerias}</NumStatus>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/ferias' ? 'var(--fundo)' : 'var(--branco)'}>Férias</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/ferias' ? 'var(--fundo)' : 'var(--branco)'}>{numFerias}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
                 <Link to='/gestor/atrasos'>
-                    <DivStatusPequenos cor =''>
-                        <TxtStatus cor={localizacao.pathname === '/gestor/atrasos' ? 'ativo' : ''}>Atrasos</TxtStatus>
-                        <NumStatus cor={localizacao.pathname === '/gestor/atrasos' ? 'ativo' : ''}>{numAtraso}</NumStatus>
+                    <DivStatusPequenos cor=''>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/atrasos' ? 'var(--fundo)' : 'var(--branco)'}>Atrasos</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/atrasos' ? 'var(--fundo)' : 'var(--branco)'}>{numAtraso}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
             </DivStatusDentro>
             <Link to='/gestor'>
                 <DivStatusGrande>
-                    <TxtStatus cor={localizacao.pathname === '/gestor' ? 'ativo' : ''}>Geral</TxtStatus>
-                    <NumStatus cor={localizacao.pathname === '/gestor' ? 'ativo' : ''}>{numGeral}</NumStatus>
+                    <Hcolor tamanho="" cor={localizacao.pathname === '/gestor' ? 'var(--fundo)' : 'var(--branco)'}>Geral</Hcolor>
+                    <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor' ? 'var(--fundo)' : 'var(--branco)'}>{numGeral}</Hcolor>
                 </DivStatusGrande>
             </Link>
         </DivStatus>

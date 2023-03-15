@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ButtonSmall } from '../../Components/inputs/inputs';
-import { MainInicio, SectionInicio } from '../../Components/Divisões/SectionInicio';
+import { ButtonSmall } from '../../Components/botao';
+import { MainInicio, SectionInicio } from '../../Components/Divisões/pg1';
 
 const Logo: any = require('../../assets/TimeOFF.png');
 

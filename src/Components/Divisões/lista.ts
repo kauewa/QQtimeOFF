@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
-interface ListaProps{
+
+interface ListaProps {
     tamanho: string;
 }
 
@@ -11,8 +12,8 @@ export const Lista = styled.section<ListaProps>`
     border: solid 1px;
     box-shadow: 0px 0px 4px #000000;
     border-radius: 50px;
-    width: ${props => props.tamanho === 'large' ? '70%' : '80%' };
-    height: ${props => props.tamanho === 'large' ? '50em' : '20em' };
+    width: ${props => props.tamanho === 'large' ? '70%' : '80%'};
+    height: ${props => props.tamanho === 'large' ? '50em' : '20em'};
     margin: ${props => props.tamanho === 'large' ? '30px auto' : '20px 1px'};
     overflow: scroll;
 `;

@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom";
-import { ContainerLateralGestor, Main } from "../../Components/Divisões/SectionLateral";
+import { ContainerLateralGestor, Main } from "../../Components/Divisões/pg2";
 import CadastrarColaborador from "./cadastro";
 import Dashboard from "./dashboard";
 import GestorColaborador from "./gColaborador";

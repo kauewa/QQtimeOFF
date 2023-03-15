@@ -1,19 +1,13 @@
 import styled from 'styled-components';
-import { SmallImage } from "../imagem/imagem";
+import { SmallImage } from "../../imagem/imagem";
 import { Link, useLocation } from 'react-router-dom';
+import GroupsIcon from '@mui/icons-material/Groups';
+import { Badge } from '@mui/material';
+import MailIcon from '@mui/icons-material/Mail';
+import ClearIcon from '@mui/icons-material/Clear';
 
-const logo:any = require('../../assets/TimeOFF.png');
-const logout:any = require('../../assets/logout.png');
-const time:any = require('../../assets/dashboard.png');
-const solicitacoes:any = require('../../assets/Solicitacoes.png');
-const person:any = require('../../assets/person.png');
-
-export const Main = styled.section`
-    margin-left: 350px; /* largura do menu lateral */
-    width: calc(100% - 350px); /* largura que sobra para o conteúdo principal */
-    padding: 24px 40px;
-`;
-
+const logo: any = require('../../../assets/TimeOFF.png');
+const person: any = require('../../../assets/person.png');
 
 const SectionLateral = styled.section`
     position: fixed;
@@ -40,7 +34,7 @@ const CardPerfil = styled.section`
     background-color: var(--fundo-secundario);
 `;
 
-interface PerfilFotoProps{
+interface PerfilFotoProps {
     tamanho: string;
 }
 
@@ -57,15 +51,7 @@ const FotoPerfil = styled.section<PerfilFotoProps>`
 
 `;
 
-export function PerfilFoto({tamanho}:{tamanho: string}){
-    return(
-        <FotoPerfil tamanho={tamanho}>
-            <SmallImage src={person} alt="Logo"/>
-        </FotoPerfil>
-    )
-}
-
-interface LinksProps{
+interface LinksProps {
     localidade: string;
 }
 
@@ -86,24 +72,39 @@ const Links = styled.div<LinksProps>`
 const Sair = styled(Links)`
     &:hover{
         color: #F13838;
-
     }
 `;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const Main = styled.section`
+    margin-left: 350px; /* largura do menu lateral */
+    width: calc(100% - 350px); /* largura que sobra para o conteúdo principal */
+    padding: 24px 40px;
+`;
+
+//////////////////////////////////////////////////////// Trocar pela imagem da pessoa
+export function PerfilFoto({ tamanho }: { tamanho: string }) {
+    return (
+        <FotoPerfil tamanho={tamanho}>
+            <SmallImage src={person} alt="Logo" />
+        </FotoPerfil>
+    )
+}
+////////////////////////////////////////////////////////////
 
 
 
-export function ContainerLateralColaborador(){
-    return(
+export function ContainerLateralColaborador() {
+    return (
         <SectionLateral>
-             <SmallImage src={logo} alt="Logo" />
+            <SmallImage src={logo} alt="Logo" />
             <CardPerfil>
-                <PerfilFoto tamanho='large'/>
+                <PerfilFoto tamanho='large' />
                 <h1>Gestor</h1>
             </CardPerfil>
             <Link to="/" >
                 <Sair localidade=''>
-                    <img src={logout} alt="Logo"/>
+                    <ClearIcon fontSize='large' sx={{ color: 'red' }} />
                     <h1>Sair</h1>
                 </Sair>
             </Link>
@@ -111,40 +112,36 @@ export function ContainerLateralColaborador(){
     )
 }
 
-
-
-
-
-
-
-export function ContainerLateralGestor(){
+export function ContainerLateralGestor() {
     const localizacao = useLocation()
 
-    return(
+    return (
         <SectionLateral>
             <SmallImage src={logo} alt="Logo" />
             <CardPerfil>
-                <PerfilFoto tamanho='large'/>
+                <PerfilFoto tamanho='large' />
                 <h1>Gestor</h1>
             </CardPerfil>
-            
+
             <Link to='/gestor'>
                 <Links localidade={localizacao.pathname === '/gestor' ? 'ativo' : ''}>
-                    <img src={time} alt="Logo"/>
+                    <GroupsIcon fontSize='large' />
                     <h1>Dashboard</h1>
                 </Links>
             </Link>
-                
+
             <Link to='/gestor/solicitacoes'>
                 <Links localidade={localizacao.pathname === '/gestor/solicitacoes' ? 'ativo' : ''}>
-                    <img src={solicitacoes} alt="Logo"/>
+                    <Badge badgeContent={2} color='success'>
+                        <MailIcon fontSize='large' />
+                    </Badge>
                     <h1>Solicitações</h1>
                 </Links>
             </Link>
-                
+
             <Link to="/" >
                 <Sair localidade=''>
-                    <img src={logout} alt="Logo"/>
+                    <ClearIcon fontSize='large' sx={{ color: 'red' }} />
                     <h1>Sair</h1>
                 </Sair>
             </Link>

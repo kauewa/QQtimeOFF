@@ -27,7 +27,7 @@ export const Conteudo = styled.section`
 
 
 
-/////////////////////////// Divisões extra
+/////////////////////////////////// Divisões extra
 interface Tamanho{
     tamanho: string;
 }
@@ -52,7 +52,6 @@ export const DivHorizontal = styled.div<Tamanho>`
     width: ${props => props.tamanho};
     align-items: center;
     justify-content: space-between;
-    
 `;
 
 export const Cadastrar = styled.form`
@@ -64,3 +63,4 @@ export const Cadastrar = styled.form`
     height: 100%;
     padding: 30px;
 `;
+///////////////////////////////////////////////////////////
