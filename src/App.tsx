@@ -1,5 +1,5 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import Inicio from "./pages/inicio";
+
 import Login from "./pages/login";
 import Gestor from "./pages/gestor";
 import Colaborador from "./pages/colaborador";
@@ -11,9 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Inicio />}/>
-        <Route path="/loginColaborador" element={<Login usuario='colaborador'/>}/>
-        <Route path="/loginGestor" element={<Login usuario='gestor'/>}/>
+        <Route path="/" element={<Login />}/>
         <Route path="/colaborador" element={<Colaborador />}/>
         <Route path="/gestor" element={<Gestor />}/>
         <Route path="/gestor/colaborador/:id" element={<Gestor />}/>

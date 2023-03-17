@@ -1,11 +1,16 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
-// class ApiService {
-//     private static baseURL: string = 'localhost:3001';
+class ApiService {
+    private static baseURL: string = 'http://localhost:3001';
 
-//     static async login(matricula: string, senha: string):Promise<void> {
-//         return this.post('/auth/login', { matricula, senha })
-//     }
+    static async login(Matricula: string, Senha: string) :Promise<any> {
+        try{
+            const response = await axios.post(`${this.baseURL}/auth/login`, {matricula: Matricula, senha: Senha });
+            console.log(response.data)
+        }catch(e){
+            console.error(e)
+        }
+    }
 
 
 
@@ -31,7 +36,7 @@ import axios, { AxiosResponse } from 'axios';
     //     const response: AxiosResponse<T> = await axios.delete<T>(this.baseURL + url);
     //     return response.data;
     // }
-// }
+}
 
 
-// export default ApiService;
+export default ApiService;
