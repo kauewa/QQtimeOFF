@@ -47,7 +47,7 @@ export const AddColaborador = styled.div`
       }
 
     &:hover{
-        background: var(--fundo-secundario);
+        background: #016601;
     }
 `;
 /////////////////////////////////////////////////////////////////////////////////////////////////////

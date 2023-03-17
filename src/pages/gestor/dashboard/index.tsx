@@ -7,6 +7,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ThemeProvider } from "@mui/material/styles";
 import { DivBranco } from "../../../Components/Divisões/div";
 import AddIcon from '@mui/icons-material/Add';
+import { SpeedDial } from "@mui/material";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
+import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import Tooltip from "@mui/material/Tooltip";
+// import { solicitacoes } from "../../../Entity/modeloSolicitacao";
+
 
 
 
@@ -14,13 +24,29 @@ import AddIcon from '@mui/icons-material/Add';
 //Dashboard
 export default function Dashboard() {
     const localizacao = useLocation();
+
     // Tamanho da lista filtrada
     const numStatus = (status: string) => {
         const colaboradoresFiltrados: Colaborador[] = colaboradores.filter((item) => item.status === status)
         return colaboradoresFiltrados.length;
     }
 
-    // função para listar colaboradores existentes no front
+    //Relatórios
+    const actions = [
+        { icon: <AssessmentIcon />, name: "Geral" },
+        { icon: <AllInboxIcon />, name: "Histórico" },
+        { icon: <AirplanemodeActiveIcon />, name: "Férias concedidas" },
+        { icon: <AirplanemodeInactiveIcon />, name: "Férias acumuladas" }
+    ]
+
+    // const ferias = solicitacoes.map(item => ({
+    //     start: item.inicio_ferias,
+    //     end: item.fim_ferias
+    // }))
+
+
+
+    /////////////////////////////////////////////////////    // função para listar colaboradores existentes no front
     const ListarColaboradores = (status: string) => {
         // Verificação de filtro
         if (status !== '') {
@@ -57,6 +83,8 @@ export default function Dashboard() {
             )
         }
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     return (
         <>
@@ -64,7 +92,7 @@ export default function Dashboard() {
                 <H1>Equipe</H1>
                 <Link to='/gestor/cadastro'>
                     <AddColaborador>
-                        <AddIcon fontSize="large" />
+                        <AddIcon fontSize="large" sx={{ color: "white" }} />
                     </AddColaborador>
                 </Link>
             </DivTopo>
@@ -84,6 +112,31 @@ export default function Dashboard() {
                     </DivBranco>
                 </div>
             </MainDashboard>
+            <Tooltip title="Relatórios">
+                <SpeedDial
+                    ariaLabel="Relatórios"
+                    sx={{
+                        position: 'absolute',
+                        bottom: 20,
+                        right: 20,
+                    }}
+                    icon={<KeyboardArrowUpIcon />}
+                    FabProps={{
+                        sx: {
+                            background: "var(--verde-forte)",
+                            ":hover": { background: '#016601' }
+                        }
+                    }}
+                >
+                    {actions.map((action) => (
+                        <SpeedDialAction
+                            key={action.name}
+                            icon={action.icon}
+                            tooltipTitle={action.name}
+                        />
+                    ))}
+                </SpeedDial>
+            </Tooltip>
         </>
     )
 }

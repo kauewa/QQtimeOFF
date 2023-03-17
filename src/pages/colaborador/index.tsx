@@ -25,8 +25,8 @@ export default function Colaborador() {
                 <Head>
                     <DivHorizontal tamanho='200px'>
                         <DivStatusGrande>
-                            <Hcolor tamanho='' cor=''>Saldo férias</Hcolor>
-                            <Hcolor tamanho='' cor=''>0</Hcolor>
+                            <Hcolor tamanho='28px' cor='var(--branco)'>Saldo férias</Hcolor>
+                            <Hcolor tamanho='42px' cor='var(--branco)'>0</Hcolor>
                         </DivStatusGrande>
                     </DivHorizontal>
                 </Head>

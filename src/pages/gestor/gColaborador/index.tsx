@@ -42,8 +42,8 @@ export default function GestorColaborador(){
                 </DivHorizontal>
                 <DivHorizontal tamanho='200px'>
                 <DivStatusGrande>
-                    <Hcolor tamanho='' cor=''>Saldo férias</Hcolor>
-                    <Hcolor tamanho='42px' cor=''>{colaborador.saldo_ferias}</Hcolor>
+                    <Hcolor tamanho='28px' cor='var(--branco)'>Saldo férias</Hcolor>
+                    <Hcolor tamanho='42px' cor='var(--branco)'>{colaborador.saldo_ferias}</Hcolor>
                 </DivStatusGrande>
                 </DivHorizontal>
                 
