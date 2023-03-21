@@ -1,11 +1,23 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
-// class ApiService {
-//     private static baseURL: string = 'localhost:3001';
+class ApiService {
+    private static baseURL: string = 'http://localhost:3001';
+    private static instance = axios.create({
+        baseURL: this.baseURL,
+    })
 
-//     static async login(matricula: string, senha: string):Promise<void> {
-//         return this.post('/auth/login', { matricula, senha })
-//     }
+    static async login(Matricula: string, Senha: string) :Promise<any> {
+        try{
+            const response = await this.instance.post('/auth/login', {matricula: Matricula, senha: Senha });
+            console.log(response.data)
+            const gestor:boolean = response.data.gestor
+            localStorage.setItem('token', response.data.access_token)
+            localStorage.setItem('gestor', gestor.toString())
+        }catch(e){
+            console.error(e)
+        }
+    }
+
 
 
 
@@ -31,7 +43,7 @@ import axios, { AxiosResponse } from 'axios';
     //     const response: AxiosResponse<T> = await axios.delete<T>(this.baseURL + url);
     //     return response.data;
     // }
-// }
+}
 
 
-// export default ApiService;
+export default ApiService;

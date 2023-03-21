@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { SmallImage } from "../../imagem/imagem";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Badge } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
@@ -93,8 +93,16 @@ export function PerfilFoto({ tamanho }: { tamanho: string }) {
 ////////////////////////////////////////////////////////////
 
 
-
 export function ContainerLateralColaborador() {
+    const navigate = useNavigate();
+
+    const logout = () =>{
+        localStorage.removeItem('token');
+        localStorage.removeItem('gestor');
+        navigate('/')
+    }
+
+
     return (
         <SectionLateral>
             <SmallImage src={logo} alt="Logo" />
@@ -102,18 +110,23 @@ export function ContainerLateralColaborador() {
                 <PerfilFoto tamanho='large' />
                 <h1>Gestor</h1>
             </CardPerfil>
-            <Link to="/" >
-                <Sair localidade=''>
+                <Sair localidade='' onClick={logout}>
                     <ClearIcon fontSize='large' sx={{ color: 'red' }} />
                     <h1>Sair</h1>
                 </Sair>
-            </Link>
         </SectionLateral>
     )
 }
 
 export function ContainerLateralGestor() {
     const localizacao = useLocation()
+    const navigate = useNavigate();
+
+    const logout = () =>{
+        localStorage.removeItem('token');
+        localStorage.removeItem('gestor');
+        navigate('/')
+    }
 
     return (
         <SectionLateral>
@@ -139,12 +152,11 @@ export function ContainerLateralGestor() {
                 </Links>
             </Link>
 
-            <Link to="/" >
-                <Sair localidade=''>
+                <Sair localidade='' onClick={logout}>
                     <ClearIcon fontSize='large' sx={{ color: 'red' }} />
                     <h1>Sair</h1>
                 </Sair>
-            </Link>
+            
         </SectionLateral>
     )
 }
