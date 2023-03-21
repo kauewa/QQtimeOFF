@@ -6,7 +6,6 @@ import { ButtonSmall } from '../../Components/botao';
 import { MainInicio, SectionInicio } from '../../Components/Divisões/pg1';
 import { H1 } from '../../Components/texto';
 
-
 const Logo: any = require('../../assets/TimeOFF.png');
 
 export default function Login(){
@@ -33,8 +32,7 @@ export default function Login(){
             navigate('/colaborador')
         }  
     }
-        
-    
+
 
 
     return(

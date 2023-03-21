@@ -11,8 +11,6 @@ function App() {
   const token = localStorage.getItem('token');
   const gestor = localStorage.getItem('gestor') === "true";
 
-  
-
   return (
     <BrowserRouter>
       <Routes>
@@ -32,6 +30,7 @@ function App() {
          : 
           <Route path="*" element={<h1>error</h1>} />
         }
+
 
       </Routes>
     </BrowserRouter>
