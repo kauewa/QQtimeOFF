@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Colaborador, colaboradores } from "../../../Entity/modeloColaboradores";
 import { H1, Hstatus } from "../../../Components/texto";
 import { MainDashboard, AddColaborador, DivColaborador, SectionEquipe, SectionStatus, Theme, DivTopo } from "./styles";
@@ -15,6 +15,7 @@ import AllInboxIcon from '@mui/icons-material/AllInbox';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Tooltip from "@mui/material/Tooltip";
+
 // import { solicitacoes } from "../../../Entity/modeloSolicitacao";
 
 
@@ -23,7 +24,11 @@ import Tooltip from "@mui/material/Tooltip";
 
 //Dashboard
 export default function Dashboard() {
+    const {id} = useParams()
     const localizacao = useLocation();
+
+
+
 
     // Tamanho da lista filtrada
     const numStatus = (status: string) => {
@@ -56,7 +61,7 @@ export default function Dashboard() {
             return (
                 <SectionEquipe>
                     {colaboradoresFiltrados.map((item) => (
-                        <Link to={`${localizacao.pathname.split('/').slice(0, -1).join('/')}/colaborador/${item.id}`}>
+                        <Link to={{pathname: `gestor/${id}/colaborador/${item.id}` }}>
                             <DivColaborador key={item.id}>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.funcao}</Hstatus>
@@ -90,17 +95,17 @@ export default function Dashboard() {
         <>
             <DivTopo>
                 <H1>Equipe</H1>
-                <Link to='/gestor/cadastro'>
+                <Link to={{pathname: `/gestor/${id}/cadastro`}}>
                     <AddColaborador>
                         <AddIcon fontSize="large" sx={{ color: "white" }} />
                     </AddColaborador>
                 </Link>
             </DivTopo>
             <MainDashboard>
-                {localizacao.pathname === '/gestor/disponiveis' ? ListarColaboradores('Disponivel') :
-                    (localizacao.pathname === '/gestor/aceitos' ? ListarColaboradores('Aceito') :
-                        (localizacao.pathname === '/gestor/ferias' ? ListarColaboradores('Ferias') :
-                            (localizacao.pathname === '/gestor/atrasos' ? ListarColaboradores('Atraso') : ListarColaboradores(''))))}
+                {localizacao.pathname === `/gestor/${id}/disponiveis` ? ListarColaboradores('Disponivel') :
+                    (localizacao.pathname === `/gestor/${id}/aceitos` ? ListarColaboradores('Aceito') :
+                        (localizacao.pathname === `/gestor/${id}/ferias` ? ListarColaboradores('Ferias') :
+                            (localizacao.pathname === `/gestor/${id}/atrasos` ? ListarColaboradores('Atraso') : ListarColaboradores(''))))}
                 <div>
                     <SectionStatus numGeral={colaboradores.length} numDisp={numStatus('Disponivel')} numAceito={numStatus('Aceito')} numFerias={numStatus('Ferias')} numAtraso={numStatus('Atraso')} />
                     <DivBranco>

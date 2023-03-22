@@ -16,17 +16,17 @@ function App() {
       <Routes>
       <Route path="/" element={<Login />} />
         {token ? 
-            (gestor ? <> <Route path="/gestor" element={<Gestor />} />
-            <Route path="/gestor/colaborador/:id" element={<Gestor />} />
-            <Route path="/gestor/solicitacoes/:id" element={<Gestor />} />
-            <Route path="/gestor/cadastro" element={<Gestor />} />
-            <Route path="/gestor/disponiveis" element={<Gestor />} />
-            <Route path="/gestor/aceitos" element={<Gestor />} />
-            <Route path="/gestor/ferias" element={<Gestor />} />
-            <Route path="/gestor/atrasos" element={<Gestor />} />
-            <Route path="/gestor/solicitacoes" element={<Gestor />} />
+            (gestor ? <> <Route path="/gestor/:id" element={<Gestor />} />
+            <Route path="/gestor/:id/colaborador/:idcolaborador" element={<Gestor />} />
+            <Route path="/gestor/:id/solicitacoes/:idcolaborador" element={<Gestor />} />
+            <Route path="/gestor/:id/cadastro" element={<Gestor />} />
+            <Route path="/gestor/:id/disponiveis" element={<Gestor />} />
+            <Route path="/gestor/:id/aceitos" element={<Gestor />} />
+            <Route path="/gestor/:id/ferias" element={<Gestor />} />
+            <Route path="/gestor/:id/atrasos" element={<Gestor />} />
+            <Route path="/gestor/:id/solicitacoes" element={<Gestor />} />
             </> 
-            : <Route path="/colaborador" element={<Colaborador />} />)
+            : <Route path="/colaborador/:id" element={<Colaborador />} />)
          : 
           <Route path="*" element={<h1>error</h1>} />
         }

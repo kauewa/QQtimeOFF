@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Hcolor } from "../../../Components/texto";
 
@@ -157,42 +157,43 @@ interface StatusProps {
 
 // Filtros da página dashboard
 export function SectionStatus({ numDisp, numAceito, numFerias, numAtraso, numGeral }: StatusProps) {
+    const {id} = useParams();
     const localizacao = useLocation();
 
     return (
         <DivStatus>
             <DivStatusDentro>
-                <Link to='/gestor/disponiveis'>
+                <Link to={`/gestor/${id}/disponiveis`}>
                     <DivStatusPequenos cor='verde'>
-                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/disponiveis' ? 'var(--fundo)' : 'var(--branco)'}>Disponíveis</Hcolor>
-                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/disponiveis' ? 'var(--fundo)' : 'var(--branco)'} >{numDisp}</Hcolor>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === `/gestor/${id}/disponiveis` ? 'var(--fundo)' : 'var(--branco)'}>Disponíveis</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}/disponiveis` ? 'var(--fundo)' : 'var(--branco)'} >{numDisp}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
-                <Link to='/gestor/aceitos'>
+                <Link to={`/gestor/${id}/aceitos`}>
                     <DivStatusPequenos cor='amarelo'>
-                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/aceitos' ? 'var(--fundo)' : 'var(--branco)'}>Aceitos</Hcolor>
-                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/aceitos' ? 'var(--fundo)' : 'var(--branco)'}>{numAceito}</Hcolor>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === `/gestor/${id}/aceitos` ? 'var(--fundo)' : 'var(--branco)'}>Aceitos</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}/aceitos`? 'var(--fundo)' : 'var(--branco)'}>{numAceito}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
             </DivStatusDentro>
             <DivStatusDentro>
-                <Link to='/gestor/ferias'>
+                <Link to={`/gestor/${id}/ferias`}>
                     <DivStatusPequenos cor='laranja'>
-                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/ferias' ? 'var(--fundo)' : 'var(--branco)'}>Férias</Hcolor>
-                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/ferias' ? 'var(--fundo)' : 'var(--branco)'}>{numFerias}</Hcolor>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === `/gestor/${id}/ferias` ? 'var(--fundo)' : 'var(--branco)'}>Férias</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}/ferias` ? 'var(--fundo)' : 'var(--branco)'}>{numFerias}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
-                <Link to='/gestor/atrasos'>
+                <Link to={`/gestor/${id}/atrasos`}>
                     <DivStatusPequenos cor=''>
-                        <Hcolor tamanho="21px" cor={localizacao.pathname === '/gestor/atrasos' ? 'var(--fundo)' : 'var(--branco)'}>Atrasos</Hcolor>
-                        <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor/atrasos' ? 'var(--fundo)' : 'var(--branco)'}>{numAtraso}</Hcolor>
+                        <Hcolor tamanho="21px" cor={localizacao.pathname === `/gestor/${id}/atrasos` ? 'var(--fundo)' : 'var(--branco)'}>Atrasos</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}/atrasos` ? 'var(--fundo)' : 'var(--branco)'}>{numAtraso}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
             </DivStatusDentro>
-            <Link to='/gestor'>
+            <Link to={`/gestor/${id}`}>
                 <DivStatusGrande>
-                    <Hcolor tamanho="" cor={localizacao.pathname === '/gestor' ? 'var(--fundo)' : 'var(--branco)'}>Geral</Hcolor>
-                    <Hcolor tamanho="42px" cor={localizacao.pathname === '/gestor' ? 'var(--fundo)' : 'var(--branco)'}>{numGeral}</Hcolor>
+                    <Hcolor tamanho="" cor={localizacao.pathname === `/gestor/${id}` ? 'var(--fundo)' : 'var(--branco)'}>Geral</Hcolor>
+                    <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}` ? 'var(--fundo)' : 'var(--branco)'}>{numGeral}</Hcolor>
                 </DivStatusGrande>
             </Link>
         </DivStatus>

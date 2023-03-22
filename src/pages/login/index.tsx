@@ -17,19 +17,24 @@ export default function Login(){
     useEffect(() => {
         if(localStorage.getItem('token') !== null){
             if(localStorage.getItem('gestor') === "true"){
-                navigate('/gestor')
+                
+                navigate(`/gestor/${matricula}`)
             }else{
-                navigate('/colaborador')
+                navigate(`/colaborador/${matricula}`)
             }
         }
-    }, [navigate])
+    }, [])
 
     const api = async () =>  {
         await ApiService.login(matricula,senha);
         if(localStorage.getItem('gestor') === "true"){
-            navigate('/gestor')
-        }else{
-            navigate('/colaborador')
+            const token = localStorage.getItem('token');
+            if(token !== null){
+                await ApiService.getGestor(matricula, token)
+            }
+            navigate(`/gestor/${matricula}`)
+        }else if(localStorage.getItem('gestor') === "false"){
+            navigate(`/colaborador/${matricula}`)
         }  
     }
 

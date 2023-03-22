@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
-import { Solicitacao, solicitacoes, StatusSolicitacao } from "../modeloSolicitacao";
+import { Solicitacao, StatusSolicitacao } from "../modeloSolicitacao";
 
 // Classe colaborador
 export interface Colaborador{
@@ -19,74 +19,6 @@ status: string;
 funcao: string;
 }
 
-const colaborador1: Colaborador = {
-  id: '1',
-  nome: 'João Silva',
-  cpf: '123.456.789-00',
-  email: 'joao.silva@example.com',
-  inicio_contratacao: dayjs('2022-01-01'),
-  fim_aquisitivo: dayjs('2024-01-01'),
-  gestor: false,
-  clt: true,
-  saldo_ferias: 30,
-  senha: 'senha123',
-  solicitacoes: [solicitacoes[0]],
-  ferias: null,
-  status: 'Aceito',
-  funcao: 'programador'
-};
-
-const colaborador2: Colaborador = {
-  id: '2',
-  nome: 'Maria Souza',
-  cpf: '987.654.321-00',
-  email: 'maria.souza@example.com',
-  inicio_contratacao: dayjs('2022-03-15'),
-  fim_aquisitivo: dayjs('2023-03-15'),
-  gestor: false,
-  clt: true,
-  saldo_ferias: 0,
-  senha: 'senha456',
-  solicitacoes: [solicitacoes[1]],
-  ferias: null,
-  status: 'Atraso',
-  funcao: 'analista'
-};
-
-const colaborador3: Colaborador = {
-  id: '3',
-  nome: 'Pedro Santos',
-  cpf: '111.222.333-44',
-  email: 'pedro.santos@example.com',
-  inicio_contratacao: dayjs('2022-05-01'),
-  fim_aquisitivo: dayjs('2023-05-01'),
-  gestor: false,
-  clt: true,
-  saldo_ferias: 0,
-  senha: 'senha789',
-  solicitacoes: [solicitacoes[2]],
-  ferias: null,
-  status: 'Ferias',
-  funcao: 'designer'
-};
-
-const colaborador4: Colaborador = {
-  id: '4',
-  nome: 'Ana Oliveira',
-  cpf: '555.666.777-88',
-  email: 'ana.oliveira@example.com',
-  inicio_contratacao: dayjs('2022-09-01'),
-  fim_aquisitivo: dayjs('2023-09-01'),
-  gestor: false,
-  clt: true,
-  saldo_ferias: 0,
-  senha: 'senhaabc',
-  solicitacoes: [solicitacoes[3], solicitacoes[4]],
-  ferias: null,
-  status: 'Disponivel',
-  funcao: 'dev'
-};
-
 export const setStatus = (colaborador:Colaborador) => {
   if(colaborador.solicitacoes.find(c => c.confirmacao_gestor === StatusSolicitacao.confirmado) && !colaborador.ferias){
     colaborador.status = 'Aceito'
@@ -100,9 +32,13 @@ export const setStatus = (colaborador:Colaborador) => {
 }
 
 //Lista de itens para teste de front-end
-export const colaboradores: Colaborador[] = [colaborador1, colaborador2, colaborador3, colaborador4];
+export let colaboradores: Colaborador[] = [];
 
 //Adicionar colaborador na lista
 export const adicionarColaborador = (colaborador: Colaborador) => {
     colaboradores.push(colaborador);
-  };
+}
+
+export const esvaziarColaboradores = () => {
+  colaboradores = [];
+}

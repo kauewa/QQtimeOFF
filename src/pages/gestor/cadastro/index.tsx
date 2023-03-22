@@ -2,16 +2,18 @@ import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { ButtonSmall } from '../../../Components/botao';
 import { Colaborador, adicionarColaborador } from '../../../Entity/modeloColaboradores';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import { Conteudo, DivHorizontal, Cadastrar } from '../../../Components/Divisões/div';
+import ApiService from '../../../API';
 
 
 ///////////////////// Deixar mais explicativo para cadastro principalmente CLT E O GESTOR
 export default function CadastrarColaborador() {
+  const { id } = useParams<{id: string}>();
   const navigate = useNavigate();
 
   // valores dos inputs
@@ -25,7 +27,7 @@ export default function CadastrarColaborador() {
   const [senha, setSenha] = useState('');
 
   // função para cadastrar colaborador
-  const cadastrarColaborador = () => {
+  const cadastrarColaborador = async () => {
     const colaborador: Colaborador = {
       id: matricula,
       nome: nome,
@@ -38,12 +40,19 @@ export default function CadastrarColaborador() {
       saldo_ferias: 0,
       senha: senha,
       status: 'Disponivel',
-      funcao: funcao,
+      funcao: '',
       solicitacoes: [],
       ferias: null
     }
-    adicionarColaborador(colaborador);
-    // voltar para página
+    try{
+      if(id !== undefined){
+        await ApiService.criarColaborador(id, matricula, nome, '***', email, colaborador.inicio_contratacao.format('YYYY-MM-DD'), colaborador.fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha)
+        adicionarColaborador(colaborador);
+      }
+    }catch(e){
+      console.error(e)
+    }
+    
     navigate('/gestor');
   };
 

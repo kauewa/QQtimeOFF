@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { SmallImage } from "../../imagem/imagem";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Badge } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import ClearIcon from '@mui/icons-material/Clear';
+import { esvaziarColaboradores } from '../../../Entity/modeloColaboradores';
 
 const logo: any = require('../../../assets/TimeOFF.png');
 const person: any = require('../../../assets/person.png');
@@ -121,8 +122,10 @@ export function ContainerLateralColaborador() {
 export function ContainerLateralGestor() {
     const localizacao = useLocation()
     const navigate = useNavigate();
+    const { id } = useParams();
 
     const logout = () =>{
+        esvaziarColaboradores();
         localStorage.removeItem('token');
         localStorage.removeItem('gestor');
         navigate('/')
@@ -136,15 +139,15 @@ export function ContainerLateralGestor() {
                 <h1>Gestor</h1>
             </CardPerfil>
 
-            <Link to='/gestor'>
-                <Links localidade={localizacao.pathname === '/gestor' ? 'ativo' : ''}>
+            <Link to={`/gestor/${id}`}>
+                <Links localidade={localizacao.pathname === `/gestor/${id}` ? 'ativo' : ''}>
                     <GroupsIcon fontSize='large' />
                     <h1>Dashboard</h1>
                 </Links>
             </Link>
 
-            <Link to='/gestor/solicitacoes'>
-                <Links localidade={localizacao.pathname === '/gestor/solicitacoes' ? 'ativo' : ''}>
+            <Link to={`/gestor/${id}/solicitacoes`}>
+                <Links localidade={localizacao.pathname === `/gestor/${id}/solicitacoes` ? 'ativo' : ''}>
                     <Badge badgeContent={2} color='success'>
                         <MailIcon fontSize='large' />
                     </Badge>

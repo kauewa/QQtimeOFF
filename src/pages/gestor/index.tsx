@@ -9,7 +9,7 @@ import Solicitacoes from "./solicitacoes";
 
 //O centro de todo o gestor
 export default function Gestor(){
-    const { id } = useParams();
+    const { idcolaborador, id } = useParams();
     const localizacao = useLocation();
     
     return(
@@ -17,10 +17,10 @@ export default function Gestor(){
             <ContainerLateralGestor/>
             <Main>
                 {/* verificação da rota */}
-                {localizacao.pathname === '/gestor/solicitacoes' ? (<Solicitacoes/>) : 
-                (localizacao.pathname === '/gestor/cadastro' ? (<CadastrarColaborador/>): 
-                (localizacao.pathname === `/gestor/colaborador/${id}` ? (<GestorColaborador/>): 
-                (localizacao.pathname === `/gestor/solicitacoes/${id}` ? (<Solicitacao/>):  <Dashboard/>)))}
+                {localizacao.pathname === `/gestor/${id}/solicitacoes` ? (<Solicitacoes/>) : 
+                (localizacao.pathname === `/gestor/${id}/cadastro` ? (<CadastrarColaborador/>): 
+                (localizacao.pathname === `/gestor/${id}/colaborador/${idcolaborador}` ? (<GestorColaborador/>): 
+                (localizacao.pathname === `/gestor/${id}solicitacoes/${idcolaborador}` ? (<Solicitacao/>):  <Dashboard/>)))}
             </Main>
         </>
     )

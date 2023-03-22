@@ -14,9 +14,8 @@ import { DivStatusGrande } from '../dashboard/styles';
 // Página do perfil de colaborador
 export default function GestorColaborador(){
     const navigate = useNavigate();
-
-    const {id} = useParams<{id: string}>();
-    const colaborador = colaboradores.find((colab) => colab.id === id);
+    const {idcolaborador} = useParams<{idcolaborador: string}>();
+    const colaborador = colaboradores.find((colab) => colab.id === idcolaborador);
 
     const [funcao, setFuncao] = useState('');
     const [gestor, setGestor] = useState(colaborador?.gestor);
