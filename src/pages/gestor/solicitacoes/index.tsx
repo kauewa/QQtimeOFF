@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { HeadTipo, HeadLista, Lista, Item, ItemTipo } from "../../../Components/Divisões/lista";
 import { H1 } from "../../../Components/texto";
-import { Solicitacao, solicitacoes, StatusSolicitacao } from "../../../Entity/modeloSolicitacao";
+import { Solicitacao, solicitacoes} from "../../../context/contextColaborador";
 
 
 
@@ -9,7 +9,7 @@ import { Solicitacao, solicitacoes, StatusSolicitacao } from "../../../Entity/mo
 export default function Solicitacoes(){
     
     const ListarSolicitações = () => {
-        const filtroSolicitações: Solicitacao[] = solicitacoes.filter((sol) => sol.confirmacao_gestor === StatusSolicitacao.pendente) 
+        const filtroSolicitações: Solicitacao[] = solicitacoes.filter((sol) => sol.status === "pendente") 
         return(
             <>
                 {filtroSolicitações.map(sol => (

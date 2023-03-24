@@ -1,32 +1,44 @@
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from "@mui/x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ContainerLateralColaborador, Main } from "../../Components/Divisões/pg2";
 import { Hcolor, Hstatus } from "../../Components/texto";
-import { Switch, TextField } from '@mui/material';
 import { Conteudo, DivColuna, DivHorizontal, Head, Cadastrar } from '../../Components/Divisões/div';
-import { ButtonSmall } from '../../Components/botao';
-import { useState } from 'react';
-import { Dayjs } from 'dayjs';
+import { useContext, useEffect } from 'react';
 import { DivStatusGrande } from '../gestor/dashboard/styles';
 import { HeadLista, HeadTipo, Lista } from '../../Components/Divisões/lista';
+import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
+import { CadastrarSolcitacao } from './cadastro';
+import { ColaboradorContext, ColaboradorProvider } from "../../context/contextColaborador";
 
 
 
 
 // Falta fazer o cadastro de solicitação
 export default function Colaborador() {
-    const [value, setValue] = useState<Dayjs | null>(null);
+    const navigate = useNavigate()
+    const token = localStorage.getItem('token');
+    const colaborador = useContext(ColaboradorContext);
+
+    useEffect(() => {
+        if(!token){
+            navigate('/')
+        }else{
+            const m: any = jwtDecode(token)
+            if (localStorage.getItem('gestor') === "true") {
+                navigate(`/gestor/${m.matricula}`)
+            }
+        }
+    }, [])
+    
 
     return (
-        <>
+        <ColaboradorProvider>
             <ContainerLateralColaborador />
             <Main>
                 <Head>
                     <DivHorizontal tamanho='200px'>
                         <DivStatusGrande>
                             <Hcolor tamanho='28px' cor='var(--branco)'>Saldo férias</Hcolor>
-                            <Hcolor tamanho='42px' cor='var(--branco)'>0</Hcolor>
+                            <Hcolor tamanho='42px' cor='var(--branco)'>{colaborador !== undefined ? colaborador.saldo_ferias : 0}</Hcolor>
                         </DivStatusGrande>
                     </DivHorizontal>
                 </Head>
@@ -57,25 +69,7 @@ export default function Colaborador() {
                                 </Lista>
                             </DivHorizontal>
                             <DivHorizontal tamanho='40%'>
-                                <Lista tamanho=''>
-                                    <DivColuna tamanho=''>
-                                        <Hstatus tamanho='24px' cor='Disponivel'>Solicitar</Hstatus>
-                                        <h1>Inicio</h1>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker format="DD/MM/YYYY" value={value} onChange={(newValue) => {
-                                                setValue(newValue);
-                                                console.log(value);
-                                            }} />
-                                        </LocalizationProvider>
-                                        <h1>Quantidade de dias</h1>
-                                        <TextField type="number" placeholder='dias' />
-                                        <h1>Décimo terceiro</h1>
-                                        <Switch />
-                                        <ButtonSmall cor='' size=''>
-                                            Solicitar
-                                        </ButtonSmall>
-                                    </DivColuna>
-                                </Lista>
+                                <CadastrarSolcitacao />
                             </DivHorizontal>
                         </DivHorizontal>
                         <DivColuna tamanho=''>
@@ -84,7 +78,7 @@ export default function Colaborador() {
                     </Cadastrar>
                 </Conteudo>
             </Main>
-        </>
+        </ColaboradorProvider>
 
     )
 }

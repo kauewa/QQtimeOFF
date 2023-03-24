@@ -1,5 +1,5 @@
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Colaborador, colaboradores } from "../../../Entity/modeloColaboradores";
+import { Colaborador, ColaboradoresContext } from "../../../context/contextGestor";
 import { H1, Hstatus } from "../../../Components/texto";
 import { MainDashboard, AddColaborador, DivColaborador, SectionEquipe, SectionStatus, Theme, DivTopo } from "./styles";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
@@ -15,19 +15,13 @@ import AllInboxIcon from '@mui/icons-material/AllInbox';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Tooltip from "@mui/material/Tooltip";
-
-// import { solicitacoes } from "../../../Entity/modeloSolicitacao";
-
-
-
-
+import { useContext } from "react";
 
 //Dashboard
 export default function Dashboard() {
-    const {id} = useParams()
+    const { id } = useParams()
     const localizacao = useLocation();
-
-
+    const colaboradores = useContext(ColaboradoresContext)
 
 
     // Tamanho da lista filtrada
@@ -44,12 +38,6 @@ export default function Dashboard() {
         { icon: <AirplanemodeInactiveIcon />, name: "Férias acumuladas" }
     ]
 
-    // const ferias = solicitacoes.map(item => ({
-    //     start: item.inicio_ferias,
-    //     end: item.fim_ferias
-    // }))
-
-
 
     /////////////////////////////////////////////////////    // função para listar colaboradores existentes no front
     const ListarColaboradores = (status: string) => {
@@ -61,7 +49,7 @@ export default function Dashboard() {
             return (
                 <SectionEquipe>
                     {colaboradoresFiltrados.map((item) => (
-                        <Link to={{pathname: `gestor/${id}/colaborador/${item.id}` }}>
+                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }}>
                             <DivColaborador key={item.id}>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.funcao}</Hstatus>
@@ -76,7 +64,7 @@ export default function Dashboard() {
             return (
                 <SectionEquipe>
                     {colaboradores.map((item) => (
-                        <Link to={`colaborador/${item.id}`}>
+                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }}>
                             <DivColaborador key={item.id}>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.funcao}</Hstatus>
@@ -95,7 +83,7 @@ export default function Dashboard() {
         <>
             <DivTopo>
                 <H1>Equipe</H1>
-                <Link to={{pathname: `/gestor/${id}/cadastro`}}>
+                <Link to={{ pathname: `/gestor/${id}/cadastro` }}>
                     <AddColaborador>
                         <AddIcon fontSize="large" sx={{ color: "white" }} />
                     </AddColaborador>

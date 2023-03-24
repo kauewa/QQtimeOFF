@@ -4,7 +4,7 @@ import { Conteudo, DivColuna, DivHorizontal, Head } from "../../../Components/Di
 import { HeadLista, HeadTipo, Lista } from "../../../Components/Divisões/lista";
 import { ButtonSmall } from "../../../Components/botao";
 import { H1, Hstatus } from "../../../Components/texto";
-import { solicitacoes } from "../../../Entity/modeloSolicitacao";
+import { solicitacoes } from "../../../context/contextColaborador";
 
 export default function Solicitacao(){
     const {id} = useParams();
@@ -21,7 +21,7 @@ export default function Solicitacao(){
         <Conteudo>
             <DivHorizontal tamanho="100%">
                 <div>
-                    <h1>Socilitação criada dia: {solicitacao?.data_solicitacao.format('DD/MM/YYYY')}</h1>
+                    <h1>Socilitação criada dia: {solicitacao?.data_criacao.format('DD/MM/YYYY')}</h1>
                     <br/>
                     <h1>Inicio das férias: {solicitacao?.inicio_ferias.format('DD/MM/YYYY')}</h1>
                     <br/>

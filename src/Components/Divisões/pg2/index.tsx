@@ -5,7 +5,6 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import { Badge } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import ClearIcon from '@mui/icons-material/Clear';
-import { esvaziarColaboradores } from '../../../Entity/modeloColaboradores';
 
 const logo: any = require('../../../assets/TimeOFF.png');
 const person: any = require('../../../assets/person.png');
@@ -125,7 +124,6 @@ export function ContainerLateralGestor() {
     const { id } = useParams();
 
     const logout = () =>{
-        esvaziarColaboradores();
         localStorage.removeItem('token');
         localStorage.removeItem('gestor');
         navigate('/')

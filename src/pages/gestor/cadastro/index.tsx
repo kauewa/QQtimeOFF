@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { ButtonSmall } from '../../../Components/botao';
-import { Colaborador, adicionarColaborador } from '../../../Entity/modeloColaboradores';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -13,7 +12,7 @@ import ApiService from '../../../API';
 
 ///////////////////// Deixar mais explicativo para cadastro principalmente CLT E O GESTOR
 export default function CadastrarColaborador() {
-  const { id } = useParams<{id: string}>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   // valores dos inputs
@@ -25,35 +24,20 @@ export default function CadastrarColaborador() {
   const [clt, setClt] = useState(true);
   const [funcao, setFuncao] = useState('');
   const [senha, setSenha] = useState('');
+  const inicio_contratacao = !inicio ? dayjs() : inicio;
+  const fim_aquisitivo = !inicio ? dayjs().add(1, 'year') : inicio.add(1, 'year');
+  const token = localStorage.getItem('token');
 
   // função para cadastrar colaborador
   const cadastrarColaborador = async () => {
-    const colaborador: Colaborador = {
-      id: matricula,
-      nome: nome,
-      cpf: '',
-      email: email,
-      inicio_contratacao: !inicio ? dayjs() : inicio,
-      fim_aquisitivo: !inicio ? dayjs().add(1, 'year') : inicio.add(1, 'year'),
-      gestor: gestor,
-      clt: clt,
-      saldo_ferias: 0,
-      senha: senha,
-      status: 'Disponivel',
-      funcao: '',
-      solicitacoes: [],
-      ferias: null
-    }
-    try{
-      if(id !== undefined){
-        await ApiService.criarColaborador(id, matricula, nome, '***', email, colaborador.inicio_contratacao.format('YYYY-MM-DD'), colaborador.fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha)
-        adicionarColaborador(colaborador);
+    try {
+      if (id !== undefined && token !== null) {
+        await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, token)
+        navigate(`/gestor/${id}`);
       }
-    }catch(e){
-      console.error(e)
+    } catch (e) {
+      console.error('erro')
     }
-    
-    navigate('/gestor');
   };
 
   return (
@@ -125,7 +109,10 @@ export default function CadastrarColaborador() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
-          <ButtonSmall cor='' size="large" onClick={cadastrarColaborador}>
+          <ButtonSmall cor='' size="large" onClick={async(e) => {
+            e.preventDefault()
+            await cadastrarColaborador()
+          }}>
             Cadastrar
           </ButtonSmall>
         </Cadastrar>
