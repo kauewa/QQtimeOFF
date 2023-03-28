@@ -22,6 +22,7 @@ export default function Dashboard() {
     const { id } = useParams()
     const localizacao = useLocation();
     const colaboradores = useContext(ColaboradoresContext)
+    console.log(colaboradores)
 
 
     // Tamanho da lista filtrada
@@ -52,7 +53,7 @@ export default function Dashboard() {
                         <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }}>
                             <DivColaborador key={item.id}>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.funcao}</Hstatus>
+                                <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.status}</Hstatus>
                             </DivColaborador>
                         </Link>
@@ -67,7 +68,7 @@ export default function Dashboard() {
                         <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }}>
                             <DivColaborador key={item.id}>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.funcao}</Hstatus>
+                                <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
                                 <Hstatus tamanho="21px" cor={item.status}>{item.status}</Hstatus>
                             </DivColaborador>
                         </Link>

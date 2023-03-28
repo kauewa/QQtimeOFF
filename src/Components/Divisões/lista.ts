@@ -23,7 +23,8 @@ export const HeadLista = styled.div`
     align-items: center;
     width: 100%;
     height: 5em;
-    background: var(--fundo);
+    background: var(--fundo-secundario);
+    border-bottom: solid 1px; 
 
 `;
 
@@ -39,7 +40,7 @@ export const HeadTipo = styled.div<ListaProps>`
 
 export const Item = styled(HeadLista)`
     background: transparent;
-    height: 4em;
+    height: 3em;
 
     &:hover{
         background: var(--fundo);
@@ -47,6 +48,6 @@ export const Item = styled(HeadLista)`
 `;
 
 export const ItemTipo = styled(HeadTipo)`
-    border-right: none;
+    
 
 `;

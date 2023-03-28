@@ -5,6 +5,8 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import { Badge } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useContext } from 'react';
+import { SolicitacoesPendentesContext } from '../../../context/contextGestor';
 
 const logo: any = require('../../../assets/TimeOFF.png');
 const person: any = require('../../../assets/person.png');
@@ -122,6 +124,7 @@ export function ContainerLateralGestor() {
     const localizacao = useLocation()
     const navigate = useNavigate();
     const { id } = useParams();
+    const solicitacoesPendentes = useContext(SolicitacoesPendentesContext);
 
     const logout = () =>{
         localStorage.removeItem('token');
@@ -146,7 +149,7 @@ export function ContainerLateralGestor() {
 
             <Link to={`/gestor/${id}/solicitacoes`}>
                 <Links localidade={localizacao.pathname === `/gestor/${id}/solicitacoes` ? 'ativo' : ''}>
-                    <Badge badgeContent={2} color='success'>
+                    <Badge badgeContent={solicitacoesPendentes.length} color='success'>
                         <MailIcon fontSize='large' />
                     </Badge>
                     <h1>Solicitações</h1>

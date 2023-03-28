@@ -12,7 +12,7 @@ import Solicitacoes from "./solicitacoes";
 
 //O centro de todo o gestor
 export default function Gestor() {
-    const { idcolaborador, id } = useParams();
+    const { idcolaborador, id, idsolicitacao } = useParams();
     const localizacao = useLocation();
     const navigate = useNavigate()
     const token = localStorage.getItem('token');
@@ -37,7 +37,7 @@ export default function Gestor() {
                 {localizacao.pathname === `/gestor/${id}/solicitacoes` ? (<Solicitacoes />) :
                     (localizacao.pathname === `/gestor/${id}/cadastro` ? (<CadastrarColaborador />) :
                         (localizacao.pathname === `/gestor/${id}/colaborador/${idcolaborador}` ? (<GestorColaborador />) :
-                            (localizacao.pathname === `/gestor/${id}solicitacoes/${idcolaborador}` ? (<Solicitacao />) : <Dashboard />)))}
+                            (localizacao.pathname === `/gestor/${id}/solicitacoes/${idsolicitacao}` ? (<Solicitacao />) : <Dashboard />)))}
             </Main>
         </ListaProvider>
     )

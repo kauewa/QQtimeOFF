@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { Solicitacao } from '../context/contextColaborador';
-import { Colaborador, setStatus } from '../context/contextGestor';
+import { Colaborador, Funcao, setStatus } from '../context/contextGestor';
 
 class ApiService {
     private static baseURL: string = 'http://localhost:3001';
@@ -26,12 +26,45 @@ class ApiService {
 
 
     ///////////////////////////////////////////////////Métodos Gestor
-    static async getGestor(matricula: string, token: string): Promise<Colaborador[] | undefined> {
+    static async getGestor(matricula: string, token: string): Promise<any> {
         try {
             const response = await this.instance.get(`/colaborador/gestor/${matricula}`, { headers: { Authorization: 'Bearer ' + token } })
             console.log(response.data)
             const colaboradores: Colaborador[] = []
+            const solicitacoesPendentes: Solicitacao[] = []
+            const funcoes: Funcao[] = []
+
             response.data.colaboradores.forEach((colab: any) => {
+                const solicitacoes: Solicitacao[] = []
+
+                const funcao: Funcao = {
+                    idfuncao: colab.funcao.idfuncao,
+                    nome_funcao: colab.funcao.nome_funcao
+                }
+                if (!funcoes.find((func) => func.idfuncao === funcao.idfuncao)) {
+                  funcoes.push(funcao);
+                }
+                
+
+                colab.solicitacoes.forEach((sol: any) => {
+                    const solicitacao: Solicitacao = {
+                        id: sol.idsolicitacoes,
+                        idSolicitante: colab.matricula,
+                        data_criacao: dayjs(sol.data_criacao),
+                        inicio_ferias: dayjs(sol.inicio_ferias),
+                        qtd_dias: sol.qtd_dias,
+                        fim_ferias: dayjs(sol.fim_ferias),
+                        decimo_terceiro: sol.decimo_terceiro,
+                        comentario: sol.comentario,
+                        retorno: sol.retorno,
+                        status: sol.status
+                    }
+                    solicitacoes.push(solicitacao)
+                    
+                    if(solicitacao.status === "pendente"){
+                        solicitacoesPendentes.push(solicitacao)
+                    }
+                })
 
                 const colaborador: Colaborador = {
                     id: colab.matricula,
@@ -45,20 +78,20 @@ class ApiService {
                     saldo_ferias: colab.saldo_ferias,
                     senha: colab.senha,
                     status: '',
-                    funcao: colab.funcao,
-                    solicitacoes: [],
+                    funcao: funcao,
+                    solicitacoes: solicitacoes,
                     ferias: null
                 }
-                // colab.solicitacoes.forEach((sol: any) => {
-                //     const solicitacao: Solicitacao = {
-                //         id: sol.idSolicitacoes,
-                //         colaborador_matri
-                //     }
-                // })
                 setStatus(colaborador);
                 colaboradores.push(colaborador)
             });
-            return colaboradores
+            const objeto = {
+                colaboradores: colaboradores,
+                solicitacoesPendentes: solicitacoesPendentes,
+                funcoes: funcoes
+            } 
+
+            return objeto
 
         } catch (e) {
             console.error(e)
@@ -77,6 +110,7 @@ class ApiService {
         clt: boolean,
         saldo_ferias: number,
         senha: string,
+        funcao: number,
         token: string
     ) {
 
@@ -92,12 +126,22 @@ class ApiService {
                 clt: clt,
                 saldo_ferias: saldo_ferias,
                 senha: senha,
-                funcao_idfuncao: 1
+                funcao_idfuncao: funcao
             }
             console.log(objeto)
             const response = await this.instance.post(`/colaborador/${id}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
             console.log(response.data)
         } catch (e) {
+            console.error(e)
+        }
+    }
+
+
+    static async respostaSolicitacao(idsolicitacao:number, retorno: string, status: string, token: string){
+        try{
+            const response = await this.instance.patch(`/solicitacoes/${idsolicitacao}`, {retorno: retorno, status: status}, {headers: { Authorization: 'Bearer ' + token }})
+            console.log(response.data)
+        }catch(e){
             console.error(e)
         }
     }
@@ -161,6 +205,10 @@ class ApiService {
             const response = await this.instance.get(`/colaborador/${matricula}`, { headers: { Authorization: 'Bearer ' + token } })
             const solicitacoes: Solicitacao[] = [];
             const colab = response.data;
+            const funcao:Funcao = {
+                idfuncao: 1,
+                nome_funcao: 'gestor'
+            }
 
             response.data.solicitacoes.forEach((sol: any) => {
                 const solicitacao: Solicitacao = {
@@ -177,6 +225,7 @@ class ApiService {
                 }
                 solicitacoes.push(solicitacao)
             })
+            console.log(solicitacoes)
 
             const colaborador:Colaborador = {
                 id: colab.matricula,
@@ -190,21 +239,31 @@ class ApiService {
                 saldo_ferias: colab.saldo_ferias,
                 senha: colab.senha,
                 status: '',
-                funcao: '',
+                funcao: funcao,
                 solicitacoes: solicitacoes,
                 ferias: null
             }
-            if(colaborador){
+                console.log(colaborador)
+            
                 return colaborador;
-            }else{
-                console.log('dados errados')
-            }
+            
 
             
 
         }catch(e){
             console.error('error')
         }
+    }
+
+
+
+    /////////////////////////////////////////////////////// Método Função
+
+    static async cadastrarFuncao(nome_funcao: string){
+        const response = await this.instance.post('/funcao', {nome_funcao: nome_funcao})
+        console.log(response.data)
+        console.log(response.data.idfuncao)
+        return response.data.idfuncao
     }
 
 

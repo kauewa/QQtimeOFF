@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import { ButtonSmall } from '../../../Components/botao';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
+import { Autocomplete, FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import { Conteudo, DivHorizontal, Cadastrar } from '../../../Components/Divisões/div';
 import ApiService from '../../../API';
+import { FuncoesContext } from '../../../context/contextGestor';
 
 
 ///////////////////// Deixar mais explicativo para cadastro principalmente CLT E O GESTOR
@@ -22,19 +23,36 @@ export default function CadastrarColaborador() {
   const [inicio, setInicio] = useState<Dayjs | null>(dayjs());
   const [gestor, setGestor] = useState(false);
   const [clt, setClt] = useState(true);
-  const [funcao, setFuncao] = useState('');
+  const [funcao, setFuncao] = useState<number>();
   const [senha, setSenha] = useState('');
   const inicio_contratacao = !inicio ? dayjs() : inicio;
   const fim_aquisitivo = !inicio ? dayjs().add(1, 'year') : inicio.add(1, 'year');
   const token = localStorage.getItem('token');
+  const funcoes = useContext(FuncoesContext);
+  const [inputValue, setInputValue] = useState('')
+
+  const optionsFuncoes: any[] = []
+  funcoes.forEach((func) => {
+    const option = {
+      label: func.nome_funcao,
+      id: func.idfuncao,
+      value: func.idfuncao
+    }
+    optionsFuncoes.push(option)
+  })
 
   // função para cadastrar colaborador
   const cadastrarColaborador = async () => {
     try {
-      if (id !== undefined && token !== null) {
-        await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, token)
+      if (id !== undefined && token !== null && funcao !== undefined) {
+        await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, funcao, token)
+        navigate(`/gestor/${id}`);
+      }else if(id !== undefined && token !== null && inputValue !== ''){
+        const response: number = await ApiService.cadastrarFuncao(inputValue)
+        await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, response, token)
         navigate(`/gestor/${id}`);
       }
+
     } catch (e) {
       console.error('erro')
     }
@@ -73,12 +91,15 @@ export default function CadastrarColaborador() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <TextField
-              id="funcao"
-              label="Função"
-              variant="outlined"
-              value={funcao}
-              onChange={(e) => setFuncao(e.target.value)}
+            <Autocomplete
+              disablePortal
+              freeSolo
+              options={optionsFuncoes}
+              onChange={(e, newValue) => { setFuncao(newValue.value); }}
+              inputValue={inputValue}
+              onInputChange={(e, newValue) => { setFuncao(undefined); setInputValue(newValue); }}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Funções" />}
             />
           </DivHorizontal>
           <h1>Inicio da contratação</h1>
@@ -109,7 +130,7 @@ export default function CadastrarColaborador() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
-          <ButtonSmall cor='' size="large" onClick={async(e) => {
+          <ButtonSmall cor='' size="large" onClick={async (e) => {
             e.preventDefault()
             await cadastrarColaborador()
           }}>

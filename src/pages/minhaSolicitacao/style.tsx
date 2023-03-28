@@ -6,12 +6,12 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ApiService from "../../API";
 import { ButtonSmall } from "../../Components/botao";
-import { DivColuna } from "../../Components/Divisões/div";
+import { DivColuna, } from "../../Components/Divisões/div";
 import { Lista } from "../../Components/Divisões/lista";
 import { Hstatus } from "../../Components/texto";
 
 
-
+////////////////////////////////////////////////Cadastro
 export function CadastrarSolcitacao() {
     const [value, setValue] = useState<Dayjs | null>(null);
     const { id } = useParams()
@@ -20,7 +20,7 @@ export function CadastrarSolcitacao() {
     const [dt, setDt] = useState(false);
 
     const cadastrarSolcitacao = async () => {
-        if(value !== null && dias >= 4){
+        if (value !== null && dias >= 4) {
             try {
                 const inicio = value ? value.format("YYYY-MM-DD") : "";
                 const fim = value ? value.add(dias, "day").format("YYYY-MM-DD") : "";
@@ -31,12 +31,12 @@ export function CadastrarSolcitacao() {
             } catch (error) {
                 console.error(error)
             }
-        }else if(dias < 4) {
+        } else if (dias < 4) {
             alert('Você só pode pedir férias acima de 4 dias!')
-        }else{
+        } else {
             alert('preencha todas informações!')
         }
-        
+
 
     }
 
@@ -72,3 +72,6 @@ export function CadastrarSolcitacao() {
 
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

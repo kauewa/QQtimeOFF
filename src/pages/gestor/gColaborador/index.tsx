@@ -2,11 +2,11 @@ import { Switch, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DivHorizontal, Head, Conteudo } from '../../../Components/Divisões/div';
-import { HeadTipo, HeadLista, Lista } from '../../../Components/Divisões/lista';
+import { HeadTipo, HeadLista, Lista, Item, ItemTipo } from '../../../Components/Divisões/lista';
 import { PerfilFoto } from '../../../Components/Divisões/pg2';
 import { ButtonSmall } from '../../../Components/botao';
 import { Hcolor, Hstatus } from '../../../Components/texto';
-import { ColaboradoresContext } from '../../../context/contextGestor';
+import { Colaborador, ColaboradoresContext } from '../../../context/contextGestor';
 import { DivStatusGrande } from '../dashboard/styles';
 
 
@@ -34,6 +34,58 @@ export default function GestorColaborador() {
     if (!colaborador) {
         return <p>Colaborador não encontrado</p>;
     }
+
+
+    const ColaboradoresRelacionados = () => {
+        const colaboradoresRelacionados: Colaborador[] = colaboradores.filter((colab) => colab.funcao.idfuncao === colaborador.funcao.idfuncao)
+
+        return (
+            <>
+                {colaboradoresRelacionados.map((colab) => {
+                    if (colaborador.id !== colab.id) {
+                        return (
+                            <Item>
+                                <ItemTipo tamanho="50%">
+                                    <Hstatus tamanho="18px" cor={colab.status}>{colab.nome}</Hstatus>
+                                </ItemTipo>
+                                <ItemTipo tamanho="50%">
+                                    <Hstatus tamanho="18px" cor={colab.status}>{colab.status}</Hstatus>
+                                </ItemTipo>
+                            </Item>
+                        )
+                    }
+                })}
+            </>
+        )
+    }
+
+
+    const ListarSolicitacoes = () => {
+
+        return (
+            <>
+                {colaborador.solicitacoes.map((item) => (
+                    <Item>
+                        <ItemTipo tamanho="25%">
+                            <h1>{item.data_criacao.format("DD/MM/YYYY")}</h1>
+                        </ItemTipo>
+                        <ItemTipo tamanho="25%">
+                            <h1>{item.inicio_ferias.format("DD/MM/YYYY")}</h1>
+                        </ItemTipo>
+                        <ItemTipo tamanho="25%">
+                            <h1>{item.qtd_dias}</h1>
+                        </ItemTipo>
+                        <ItemTipo tamanho="25%">
+                            <h1>{item.status}</h1>
+                        </ItemTipo>
+                    </Item>
+                ))}
+            </>
+
+        )
+
+    }
+
 
     return (
         <>
@@ -71,6 +123,7 @@ export default function GestorColaborador() {
                                     <h1>Status</h1>
                                 </HeadTipo>
                             </HeadLista>
+                            {ListarSolicitacoes()}
                         </Lista>
                     </DivHorizontal>
                     <DivHorizontal tamanho='45%'>
@@ -84,6 +137,7 @@ export default function GestorColaborador() {
                                     <h1>Status</h1>
                                 </HeadTipo>
                             </HeadLista>
+                            {ColaboradoresRelacionados()}
                         </Lista>
 
                     </DivHorizontal>

@@ -1,8 +1,7 @@
 import { Dayjs } from "dayjs";
 import { createContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ApiService from "../../API";
-
 import Solicitacao from "../../pages/gestor/solicitacao";
 import { Colaborador } from "../contextGestor";
 
@@ -24,31 +23,35 @@ export interface Solicitacao{
 export const ColaboradorContext = createContext<Colaborador | undefined>(undefined)
 
 
-export function ColaboradorProvider({children}: {children: JSX.Element[]}){
+export function ColaboradorProvider ({children}: {children: JSX.Element[]})  {
     const { id } = useParams();
     const token = localStorage.getItem('token');
-    const [colaborador, setColaborador] = useState<Colaborador | undefined>();
+    const [colaborador, setColaborador] = useState<Colaborador | undefined>(undefined);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (id !== undefined && token !== null) {
             const fetchColaborador = async () => {
-              const response = await ApiService.getColaborador(id, token);
-              if (response !== undefined) {
-                setColaborador(response)
-              }
+                try {
+                    const response = await ApiService.getColaborador(id, token);
+                    if (response !== undefined) {
+                        setColaborador(response)
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
             }
             fetchColaborador()
         }
-    }, [])
+    }, [navigate, alert])
 
     return(
         <ColaboradorContext.Provider value={colaborador}>
             {children}
         </ColaboradorContext.Provider>
     )
-
-
 }
+
 
 
 

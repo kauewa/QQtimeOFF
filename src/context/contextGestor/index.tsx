@@ -4,6 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import ApiService from "../../API";
 import { Solicitacao } from "../contextColaborador";
 
+export interface Funcao {
+  idfuncao: number;
+  nome_funcao: string
+}
+
 // Classe colaborador
 export interface Colaborador {
   id: string;
@@ -19,7 +24,7 @@ export interface Colaborador {
   solicitacoes: Solicitacao[];
   ferias: Solicitacao | null;
   status: string;
-  funcao: string;
+  funcao: Funcao;
 }
 
 export const setStatus = (colaborador: Colaborador) => {
@@ -36,22 +41,28 @@ export const setStatus = (colaborador: Colaborador) => {
 
 
 export const ColaboradoresContext = createContext<Colaborador[] | never[]>([])
+export const SolicitacoesPendentesContext = createContext<Solicitacao[] | never[]>([])
+export const FuncoesContext = createContext<Funcao[] | never[]>([])
 
 
 
-export function ListaProvider({children} : {children: JSX.Element[]}) {
+export function ListaProvider({ children }: { children: JSX.Element[] }) {
   const { id } = useParams();
   const token = localStorage.getItem('token');
   const [colaboradores, setColaborares] = useState<Colaborador[]>([]);
+  const [solicitacoesPendentes, setSolicitacoesPendentes] = useState<Solicitacao[]>([])
+  const [funcoes, setFuncoes] = useState<Funcao[]>([])
   const navigate = useNavigate()
-  // const [solicitacoesPendentes, setSolicitacoesPendentes] = useState<Solicitacao[]>([])
+
 
   useEffect(() => {
     if (id !== undefined && token !== null) {
       const fetchGestor = async () => {
         const response = await ApiService.getGestor(id, token);
         if (response !== undefined) {
-          setColaborares(response)
+          setColaborares(response.colaboradores);
+          setSolicitacoesPendentes(response.solicitacoesPendentes)
+          setFuncoes(response.funcoes)
         }
       }
       fetchGestor()
@@ -59,9 +70,13 @@ export function ListaProvider({children} : {children: JSX.Element[]}) {
   }, [navigate])
 
   return (
-    <ColaboradoresContext.Provider value={colaboradores}>
-      {children}
-    </ColaboradoresContext.Provider>
+    <FuncoesContext.Provider value={funcoes}>
+      <ColaboradoresContext.Provider value={colaboradores}>
+        <SolicitacoesPendentesContext.Provider value={solicitacoesPendentes}>
+          {children}
+        </SolicitacoesPendentesContext.Provider>
+      </ColaboradoresContext.Provider>
+    </FuncoesContext.Provider>
   );
 }
 

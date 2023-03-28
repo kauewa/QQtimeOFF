@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/gestor/:id" element={<Gestor />} />
         <Route path="/gestor/:id/colaborador/:idcolaborador" element={<Gestor />} />
-        <Route path="/gestor/:id/solicitacoes/:idcolaborador" element={<Gestor />} />
+        <Route path="/gestor/:id/solicitacoes/:idsolicitacao" element={<Gestor />} />
         <Route path="/gestor/:id/cadastro" element={<Gestor />} />
         <Route path="/gestor/:id/disponiveis" element={<Gestor />} />
         <Route path="/gestor/:id/aceitos" element={<Gestor />} />
