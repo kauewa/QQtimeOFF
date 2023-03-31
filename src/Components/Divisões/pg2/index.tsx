@@ -6,7 +6,8 @@ import { Badge } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useContext } from 'react';
-import { SolicitacoesPendentesContext } from '../../../context/contextGestor';
+import { SolicitacoesContext } from '../../../context/contextGestor';
+import { ColaboradorContext } from '../../../context/contextColaborador';
 
 const logo: any = require('../../../assets/TimeOFF.png');
 const person: any = require('../../../assets/person.png');
@@ -44,8 +45,8 @@ const FotoPerfil = styled.section<PerfilFotoProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: ${props => props.tamanho === "large" ? "200px" : "140px"};
-    height: ${props => props.tamanho === "large" ? "190px" : "130px"};
+    width: ${props => props.tamanho};
+    height: ${props => props.tamanho};
     padding-top: 15px;
     background-color: var(--verde-forte);
     box-shadow: 0px 0px 15px 1px #BBFF84;
@@ -61,7 +62,7 @@ const Links = styled.div<LinksProps>`
     display: flex;
     align-items: center;
     width: 110%;
-    justify-content: space-between;
+    justify-content: center;
     color: ${props => props.localidade === 'ativo' ? "var(--amarelo-forte)" : "var(--preto)"};
 
     &:hover{
@@ -75,6 +76,7 @@ const Sair = styled(Links)`
     &:hover{
         color: #F13838;
     }
+    cursor: pointer;
 `;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,8 +99,8 @@ export function PerfilFoto({ tamanho }: { tamanho: string }) {
 
 export function ContainerLateralColaborador() {
     const navigate = useNavigate();
-
-    const logout = () =>{
+    const colaborador = useContext(ColaboradorContext);
+    const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('gestor');
         navigate('/')
@@ -109,13 +111,13 @@ export function ContainerLateralColaborador() {
         <SectionLateral>
             <SmallImage src={logo} alt="Logo" />
             <CardPerfil>
-                <PerfilFoto tamanho='large' />
-                <h1>Gestor</h1>
+                <PerfilFoto tamanho='200px' />
+                <h1>{colaborador?.nome}</h1>
             </CardPerfil>
-                <Sair localidade='' onClick={logout}>
-                    <ClearIcon fontSize='large' sx={{ color: 'red' }} />
-                    <h1>Sair</h1>
-                </Sair>
+            <Sair localidade='' onClick={logout}>
+                <ClearIcon fontSize='large' sx={{ color: 'red' }} />
+                <h1>Sair</h1>
+            </Sair>
         </SectionLateral>
     )
 }
@@ -124,9 +126,11 @@ export function ContainerLateralGestor() {
     const localizacao = useLocation()
     const navigate = useNavigate();
     const { id } = useParams();
-    const solicitacoesPendentes = useContext(SolicitacoesPendentesContext);
+    const gestor = useContext(ColaboradorContext);
+    const solicitacoes = useContext(SolicitacoesContext);
+    const solicitacoesPendentes = solicitacoes.filter((sol) => sol.status === "pendente")
 
-    const logout = () =>{
+    const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('gestor');
         navigate('/')
@@ -135,10 +139,12 @@ export function ContainerLateralGestor() {
     return (
         <SectionLateral>
             <SmallImage src={logo} alt="Logo" />
-            <CardPerfil>
-                <PerfilFoto tamanho='large' />
-                <h1>Gestor</h1>
-            </CardPerfil>
+            <Link to={`/gestor/${id}/perfil`}>
+                <CardPerfil>
+                    <PerfilFoto tamanho='200px' />
+                    <h1>{gestor?.nome}</h1>
+                </CardPerfil>
+            </Link>
 
             <Link to={`/gestor/${id}`}>
                 <Links localidade={localizacao.pathname === `/gestor/${id}` ? 'ativo' : ''}>
@@ -156,11 +162,11 @@ export function ContainerLateralGestor() {
                 </Links>
             </Link>
 
-                <Sair localidade='' onClick={logout}>
-                    <ClearIcon fontSize='large' sx={{ color: 'red' }} />
-                    <h1>Sair</h1>
-                </Sair>
-            
+            <Sair localidade='' onClick={logout}>
+                <ClearIcon fontSize='large' sx={{ color: 'red' }} />
+                <h1>Sair</h1>
+            </Sair>
+
         </SectionLateral>
     )
 }

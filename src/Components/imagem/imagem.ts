@@ -1,5 +1,5 @@
 import styled from 'styled-components';
 
 export const SmallImage = styled.img`
-    width: 70%;
+    width: 65%;
 `;

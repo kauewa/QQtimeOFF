@@ -2,19 +2,22 @@ import { useState, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import { ButtonSmall } from '../../../Components/botao';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Autocomplete, FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
+import { Autocomplete, Box, Fade, FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import { Conteudo, DivHorizontal, Cadastrar } from '../../../Components/Divisões/div';
 import ApiService from '../../../API';
 import { FuncoesContext } from '../../../context/contextGestor';
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
+import { enqueueSnackbar } from 'notistack';
 
 
 ///////////////////// Deixar mais explicativo para cadastro principalmente CLT E O GESTOR
 export default function CadastrarColaborador() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   // valores dos inputs
   const [matricula, setMatricula] = useState('');
@@ -43,19 +46,27 @@ export default function CadastrarColaborador() {
 
   // função para cadastrar colaborador
   const cadastrarColaborador = async () => {
-    try {
-      if (id !== undefined && token !== null && funcao !== undefined) {
-        await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, funcao, token)
-        navigate(`/gestor/${id}`);
-      }else if(id !== undefined && token !== null && inputValue !== ''){
-        const response: number = await ApiService.cadastrarFuncao(inputValue)
-        await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, response, token)
-        navigate(`/gestor/${id}`);
+    setLoading(true)
+      if (!matricula || !nome || !email || !senha ) {
+        enqueueSnackbar('Por favor, preencha todos os campos obrigatórios.', {variant: "warning"})
+        setLoading(false)
+        return
       }
-
-    } catch (e) {
-      console.error('erro')
-    }
+      if (id !== undefined && token !== null){
+        if(funcao !== undefined) {
+          await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, funcao, token)
+          navigate(`/gestor/${id}`);
+        }else{
+          const response = await ApiService.cadastrarFuncao(inputValue)
+          if(typeof response === "number"){
+            await ApiService.criarColaborador(id, matricula, nome, '***', email, inicio_contratacao.format('YYYY-MM-DD'), fim_aquisitivo.format('YYYY-MM-DD'), gestor, clt, 0, senha, response, token)
+            navigate(`/gestor/${id}`); 
+          }
+          enqueueSnackbar(response, {variant: "warning"});
+          
+        }
+      }
+    setLoading(false)
   };
 
   return (
@@ -72,6 +83,7 @@ export default function CadastrarColaborador() {
               id="matricula"
               label="Matricula"
               variant="outlined"
+              color="success"
               value={matricula}
               onChange={(e) => setMatricula(e.target.value)}
             />
@@ -79,6 +91,7 @@ export default function CadastrarColaborador() {
               id="nome"
               label="Nome"
               variant="outlined"
+              color="success"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
             />
@@ -88,6 +101,7 @@ export default function CadastrarColaborador() {
               id="Email"
               label="Email"
               variant="outlined"
+              color="success"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -99,7 +113,7 @@ export default function CadastrarColaborador() {
               inputValue={inputValue}
               onInputChange={(e, newValue) => { setFuncao(undefined); setInputValue(newValue); }}
               sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Funções" />}
+              renderInput={(params) => <TextField {...params} label="Funções" color="success"/>}
             />
           </DivHorizontal>
           <h1>Inicio da contratação</h1>
@@ -126,6 +140,7 @@ export default function CadastrarColaborador() {
             id="senha"
             label="Senha"
             variant="outlined"
+            color="success"
             type="password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
@@ -138,6 +153,20 @@ export default function CadastrarColaborador() {
           </ButtonSmall>
         </Cadastrar>
       </Conteudo>
+      <Box sx={{ position: 'absolute', bottom: 20,
+              right: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ height: 60 }}>
+        <Fade
+          in={loading}
+          unmountOnExit
+        >
+          <CircularProgress 
+          size={60}
+          color='success'
+          />
+        </Fade>
+      </Box>
+      </Box>
     </>
   );
 }

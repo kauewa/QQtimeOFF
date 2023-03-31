@@ -1,36 +1,40 @@
-import { TextField } from "@mui/material";
+import { Box, CircularProgress, Fade, TextField } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from 'react'
 import { Conteudo, DivColuna, DivHorizontal, Head } from "../../../Components/Divisões/div";
 import { HeadLista, HeadTipo, Item, ItemTipo, Lista } from "../../../Components/Divisões/lista";
 import { ButtonSmall } from "../../../Components/botao";
 import { H1, Hstatus } from "../../../Components/texto";
-import { Colaborador, ColaboradoresContext, SolicitacoesPendentesContext } from "../../../context/contextGestor";
+import { Colaborador, ColaboradoresContext, SolicitacoesContext } from "../../../context/contextGestor";
 import ApiService from "../../../API";
+import dayjs from "dayjs";
 
 export default function Solicitacao() {
     const { id, idsolicitacao } = useParams();
-    const solicitacoes = useContext(SolicitacoesPendentesContext);
+    const solicitacoes = useContext(SolicitacoesContext);
     const colaboradores = useContext(ColaboradoresContext)
     const solicitacao = solicitacoes.find((sol) => sol.id.toString() === idsolicitacao);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const [resposta, setResposta] = useState('');
+    const [loading, setLoading] = useState(false)
 
     if (!solicitacao) {
         return (
             <h1>Solicitação não encontrada</h1>
         )
     }
-    
+
 
     const retorno = async (status: string) => {
+        setLoading(true)
         if (token !== null) {
 
             await ApiService.respostaSolicitacao(solicitacao.id, resposta, status, token)
             navigate(`/gestor/${id}/solicitacoes`)
 
         }
+        setLoading(false)
     }
 
     const colaborador = colaboradores.find(colab => colab.id === solicitacao.idSolicitante)
@@ -48,7 +52,9 @@ export default function Solicitacao() {
                                     <Hstatus tamanho="18px" cor={colab.status}>{colab.nome}</Hstatus>
                                 </ItemTipo>
                                 <ItemTipo tamanho="50%">
-                                    <Hstatus tamanho="18px" cor={colab.status}>{colab.status}</Hstatus>
+                                    <Hstatus tamanho="18px" cor={colab.status}>{colab.status === 'Aceito' ? `${colab.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.inicio_ferias.format('DD/MM/YYYY')} a ${colab.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.fim_ferias.format('DD/MM/YYYY')}` :
+                                            colab.status === 'Ferias' ? `Volta ${colab.ferias?.fim_ferias.format('DD/MM/YYYY')}` : 
+                                            colab.status === 'Atraso' ? `Vence ${colab.fim_aquisitivo.format('DD/MM/YYYY')}`: colab.status}</Hstatus>
                                 </ItemTipo>
                             </Item>
                         )
@@ -121,6 +127,22 @@ export default function Solicitacao() {
                     </DivHorizontal>
                 </DivHorizontal>
             </Conteudo>
+            <Box sx={{
+                position: 'absolute', bottom: 20,
+                right: 20, display: 'flex', flexDirection: 'column', alignItems: 'center'
+            }}>
+                <Box sx={{ height: 60 }}>
+                    <Fade
+                        in={loading}
+                        unmountOnExit
+                    >
+                        <CircularProgress
+                            size={60}
+                            color='success'
+                        />
+                    </Fade>
+                </Box>
+            </Box>
         </>
     )
 }

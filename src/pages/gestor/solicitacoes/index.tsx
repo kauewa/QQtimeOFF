@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { HeadTipo, HeadLista, Lista, Item, ItemTipo } from "../../../Components/Divisões/lista";
 import { H1 } from "../../../Components/texto";
 import CheckIcon from '@mui/icons-material/Check';
-import { Colaborador, ColaboradoresContext, SolicitacoesPendentesContext } from "../../../context/contextGestor";
+import { Colaborador, ColaboradoresContext, SolicitacoesContext } from "../../../context/contextGestor";
 
 
 
@@ -12,7 +12,8 @@ import { Colaborador, ColaboradoresContext, SolicitacoesPendentesContext } from 
 export default function Solicitacoes() {
     const { id } = useParams();
     const colaboradores = useContext(ColaboradoresContext)
-    const solicitacoesPendentes = useContext(SolicitacoesPendentesContext)
+    const solicitacoes = useContext(SolicitacoesContext)
+    const solicitacoesPendentes = solicitacoes.filter((sol) => sol.status === "pendente");
 
 
     const ListarSolicitações = () => {

@@ -1,4 +1,4 @@
-import { Switch, TextField } from '@mui/material';
+import { Box, CircularProgress, Fade, Switch, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DivHorizontal, Head, Conteudo } from '../../../Components/Divisões/div';
@@ -8,6 +8,8 @@ import { ButtonSmall } from '../../../Components/botao';
 import { Hcolor, Hstatus } from '../../../Components/texto';
 import { Colaborador, ColaboradoresContext } from '../../../context/contextGestor';
 import { DivStatusGrande } from '../dashboard/styles';
+import ApiService from '../../../API';
+import dayjs from 'dayjs';
 
 
 
@@ -17,10 +19,12 @@ export default function GestorColaborador() {
     const { idcolaborador } = useParams<{ idcolaborador: string }>();
     const colaboradores = useContext(ColaboradoresContext)
     const colaborador = colaboradores.find((colab) => colab.id === idcolaborador);
+    const token = localStorage.getItem('token');
+    const [loading, setLoading] = useState(false)
 
 
     const { id } = useParams();
-    const [funcao, setFuncao] = useState('');
+    const [funcao, setFuncao] = useState(colaborador?.funcao.nome_funcao);
     const [gestor, setGestor] = useState(colaborador?.gestor);
     const [clt, setClt] = useState(colaborador?.clt);
 
@@ -29,6 +33,15 @@ export default function GestorColaborador() {
         // colaborador.gestor = !gestor ? false : gestor;
         // colaborador.clt = !clt ? false: clt;
         navigate(`/gestor/${id}`);
+    }
+
+    const deletarColaborador = async () => {
+        setLoading(true)
+        if (idcolaborador !== undefined && token !== null) {
+            await ApiService.deletarColaborador(idcolaborador, token)
+            navigate(`/gestor/${id}`)
+        }
+        setLoading(false)
     }
 
     if (!colaborador) {
@@ -44,12 +57,14 @@ export default function GestorColaborador() {
                 {colaboradoresRelacionados.map((colab) => {
                     if (colaborador.id !== colab.id) {
                         return (
-                            <Item>
+                            <Item key={colab.id}>
                                 <ItemTipo tamanho="50%">
                                     <Hstatus tamanho="18px" cor={colab.status}>{colab.nome}</Hstatus>
                                 </ItemTipo>
                                 <ItemTipo tamanho="50%">
-                                    <Hstatus tamanho="18px" cor={colab.status}>{colab.status}</Hstatus>
+                                    <Hstatus tamanho="18px" cor={colab.status}>{colab.status === 'Aceito' ? `${colab.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.inicio_ferias.format('DD/MM/YYYY')} a ${colab.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.fim_ferias.format('DD/MM/YYYY')}` :
+                                        colab.status === 'Ferias' ? `Volta ${colab.ferias?.fim_ferias.format('DD/MM/YYYY')}` :
+                                            colab.status === 'Atraso' ? `Vence ${colab.fim_aquisitivo.format('DD/MM/YYYY')}` : colab.status}</Hstatus>
                                 </ItemTipo>
                             </Item>
                         )
@@ -65,18 +80,18 @@ export default function GestorColaborador() {
         return (
             <>
                 {colaborador.solicitacoes.map((item) => (
-                    <Item>
+                    <Item key={item.id}>
                         <ItemTipo tamanho="25%">
-                            <h1>{item.data_criacao.format("DD/MM/YYYY")}</h1>
+                            <Hstatus tamanho='18px' cor={item.status === "aprovado" ? 'Disponivel' : item.status === "reprovado" ? "Ferias" : "Aceito"}>{item.data_criacao.format("DD/MM/YYYY")}</Hstatus>
                         </ItemTipo>
                         <ItemTipo tamanho="25%">
-                            <h1>{item.inicio_ferias.format("DD/MM/YYYY")}</h1>
+                            <Hstatus tamanho='18px' cor={item.status === "aprovado" ? 'Disponivel' : item.status === "reprovado" ? "Ferias" : "Aceito"}>{item.inicio_ferias.format("DD/MM/YYYY")}</Hstatus>
                         </ItemTipo>
                         <ItemTipo tamanho="25%">
-                            <h1>{item.qtd_dias}</h1>
+                            <Hstatus tamanho='18px' cor={item.status === "aprovado" ? 'Disponivel' : item.status === "reprovado" ? "Ferias" : "Aceito"}>{item.qtd_dias}</Hstatus>
                         </ItemTipo>
                         <ItemTipo tamanho="25%">
-                            <h1>{item.status}</h1>
+                            <Hstatus tamanho='18px' cor={item.status === "aprovado" ? 'Disponivel' : item.status === "reprovado" ? "Ferias" : "Aceito"}>{item.status}</Hstatus>
                         </ItemTipo>
                     </Item>
                 ))}
@@ -91,7 +106,7 @@ export default function GestorColaborador() {
         <>
             <Head>
                 <DivHorizontal tamanho=''>
-                    <PerfilFoto tamanho='' />
+                    <PerfilFoto tamanho='140px' />
                     <Hstatus cor={colaborador.status} tamanho='36px'>{colaborador.nome}</Hstatus>
                 </DivHorizontal>
                 <DivHorizontal tamanho='200px'>
@@ -162,7 +177,6 @@ export default function GestorColaborador() {
                 </div>
                 <DivHorizontal tamanho='90%'>
                     <div >
-                        <h1>Função</h1>
                         <TextField
                             id="funcao"
                             label="Função"
@@ -172,11 +186,27 @@ export default function GestorColaborador() {
                         />
                     </div>
                     <DivHorizontal tamanho='20%'>
-                        <ButtonSmall cor='laranja' size=''>Excluir</ButtonSmall>
+                        <ButtonSmall cor='laranja' size='' onClick={deletarColaborador}>Excluir</ButtonSmall>
                         <ButtonSmall cor='' size='' onClick={atualizarColaborador}>Pronto</ButtonSmall>
                     </DivHorizontal>
                 </DivHorizontal>
             </Conteudo>
+            <Box sx={{
+                position: 'absolute', bottom: 20,
+                right: 20, display: 'flex', flexDirection: 'column', alignItems: 'center'
+            }}>
+                <Box sx={{ height: 60 }}>
+                    <Fade
+                        in={loading}
+                        unmountOnExit
+                    >
+                        <CircularProgress
+                            size={60}
+                            color='success'
+                        />
+                    </Fade>
+                </Box>
+            </Box>
         </>
 
     )

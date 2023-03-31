@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { enqueueSnackbar } from 'notistack';
 import { Solicitacao } from '../context/contextColaborador';
 import { Colaborador, Funcao, setStatus } from '../context/contextGestor';
 
@@ -10,17 +11,16 @@ class ApiService {
     })
 
     //LOGIN
-    static async login(Matricula: string, Senha: string): Promise<any> {
+    static async login(Matricula: string, Senha: string) {
         try {
             const response = await this.instance.post('/auth/login', { matricula: Matricula, senha: Senha });
-            console.log(response.data)
-            const gestor: boolean = response.data.gestor
             localStorage.setItem('token', response.data.access_token)
-            localStorage.setItem('gestor', gestor.toString())
-            return { token: response.data.access_token, gestor };
-        } catch (e) {
-            console.error(e)
-            throw new Error('Não foi possível fazer o login.')
+            if(response.data.access_token !== undefined){
+                return response.data.access_token;
+            }  
+            enqueueSnackbar("Matrícula ou senha incorretos!", {variant: "error"})
+        } catch(e){
+            console.error(e);
         }
     }
 
@@ -30,21 +30,24 @@ class ApiService {
         try {
             const response = await this.instance.get(`/colaborador/gestor/${matricula}`, { headers: { Authorization: 'Bearer ' + token } })
             console.log(response.data)
+            const dados = response.data.colaboradores;
             const colaboradores: Colaborador[] = []
-            const solicitacoesPendentes: Solicitacao[] = []
+            const solicitacoesLista: Solicitacao[] = []
             const funcoes: Funcao[] = []
 
-            response.data.colaboradores.forEach((colab: any) => {
+
+            dados.forEach((colab: any) => {
                 const solicitacoes: Solicitacao[] = []
+                let ferias: Solicitacao | null = null;
 
                 const funcao: Funcao = {
                     idfuncao: colab.funcao.idfuncao,
                     nome_funcao: colab.funcao.nome_funcao
                 }
                 if (!funcoes.find((func) => func.idfuncao === funcao.idfuncao)) {
-                  funcoes.push(funcao);
+                    funcoes.push(funcao);
                 }
-                
+
 
                 colab.solicitacoes.forEach((sol: any) => {
                     const solicitacao: Solicitacao = {
@@ -60,10 +63,15 @@ class ApiService {
                         status: sol.status
                     }
                     solicitacoes.push(solicitacao)
-                    
-                    if(solicitacao.status === "pendente"){
-                        solicitacoesPendentes.push(solicitacao)
+
+                    if (solicitacao.status === "pendente" || solicitacao.status === "aprovado") {
+                        solicitacoesLista.push(solicitacao)
                     }
+
+                    if (solicitacao.status === "aprovado" && dayjs().isBetween(solicitacao.inicio_ferias, solicitacao.fim_ferias)) {
+                        ferias = solicitacao;
+                    }
+
                 })
 
                 const colaborador: Colaborador = {
@@ -80,16 +88,16 @@ class ApiService {
                     status: '',
                     funcao: funcao,
                     solicitacoes: solicitacoes,
-                    ferias: null
+                    ferias: ferias
                 }
                 setStatus(colaborador);
                 colaboradores.push(colaborador)
             });
             const objeto = {
                 colaboradores: colaboradores,
-                solicitacoesPendentes: solicitacoesPendentes,
+                solicitacoes: solicitacoesLista,
                 funcoes: funcoes
-            } 
+            }
 
             return objeto
 
@@ -129,20 +137,31 @@ class ApiService {
                 funcao_idfuncao: funcao
             }
             console.log(objeto)
-            const response = await this.instance.post(`/colaborador/${id}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
-            console.log(response.data)
-        } catch (e) {
-            console.error(e)
+            await this.instance.post(`/colaborador/${id}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
+            enqueueSnackbar('Cadastro concluído', { variant: "success" })
+        } catch (e: any) {
+            enqueueSnackbar(e.response.data.message, { variant: "error" })
         }
     }
 
 
-    static async respostaSolicitacao(idsolicitacao:number, retorno: string, status: string, token: string){
-        try{
-            const response = await this.instance.patch(`/solicitacoes/${idsolicitacao}`, {retorno: retorno, status: status}, {headers: { Authorization: 'Bearer ' + token }})
-            console.log(response.data)
-        }catch(e){
-            console.error(e)
+    static async respostaSolicitacao(idsolicitacao: number, retorno: string, status: string, token: string) {
+        try {
+            await this.instance.patch(`/solicitacoes/${idsolicitacao}`, { retorno: retorno, status: status }, { headers: { Authorization: 'Bearer ' + token } })
+            enqueueSnackbar("Resposta enviada!", { variant: 'success' })
+        } catch (e: any) {
+            enqueueSnackbar(e.response.data.message, { variant: "error" })
+        }
+    }
+
+
+
+    static async deletarColaborador(matriculaColaborador: string, token: string) {
+        try {
+            await this.instance.delete(`/colaborador/${matriculaColaborador}`, { headers: { Authorization: 'Bearer ' + token } })
+            enqueueSnackbar("Colaborador excluído!", { variant: "success" })
+        } catch (e: any) {
+            enqueueSnackbar(e.response.data.message, { variant: 'error' })
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -192,10 +211,10 @@ class ApiService {
                 status: status,
                 retorno: retorno,
             }
-            const response = await this.instance.post(`/solicitacoes/${matricula}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
-            console.log(response.data)
-        } catch (e) {
-            console.error(e)
+            await this.instance.post(`/solicitacoes/${matricula}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
+            enqueueSnackbar("Solicitação enviada!", { variant: "success" })
+        } catch (e: any) {
+            enqueueSnackbar(e.response.data.message, { variant: "error" })
         }
 
     }
@@ -205,7 +224,7 @@ class ApiService {
             const response = await this.instance.get(`/colaborador/${matricula}`, { headers: { Authorization: 'Bearer ' + token } })
             const solicitacoes: Solicitacao[] = [];
             const colab = response.data;
-            const funcao:Funcao = {
+            const funcao: Funcao = {
                 idfuncao: 1,
                 nome_funcao: 'gestor'
             }
@@ -227,7 +246,7 @@ class ApiService {
             })
             console.log(solicitacoes)
 
-            const colaborador:Colaborador = {
+            const colaborador: Colaborador = {
                 id: colab.matricula,
                 nome: colab.nome,
                 cpf: colab.cpf,
@@ -243,14 +262,14 @@ class ApiService {
                 solicitacoes: solicitacoes,
                 ferias: null
             }
-                console.log(colaborador)
-            
-                return colaborador;
-            
+            console.log(colaborador)
 
-            
+            return colaborador;
 
-        }catch(e){
+
+
+
+        } catch (e) {
             console.error('error')
         }
     }
@@ -259,38 +278,17 @@ class ApiService {
 
     /////////////////////////////////////////////////////// Método Função
 
-    static async cadastrarFuncao(nome_funcao: string){
-        const response = await this.instance.post('/funcao', {nome_funcao: nome_funcao})
-        console.log(response.data)
-        console.log(response.data.idfuncao)
-        return response.data.idfuncao
+    static async cadastrarFuncao(nome_funcao: string) {
+        try {
+            const response = await this.instance.post('/funcao', { nome_funcao: nome_funcao })
+            console.log(response.data)
+            console.log(response.data.idfuncao)
+            return response.data.idfuncao
+        } catch (e: any) {
+            return e.response.data.message;
+        }
     }
 
-
-
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////
-    // private static async get<T>(url: string): Promise<T> {
-    //     const response: AxiosResponse<T> = await axios.get<T>(this.baseURL + url);
-    //     return response.data;
-    // }
-
-    // private static async post<T>(url: string, data: any): Promise<T> {
-    //     const response: AxiosResponse<T> = await axios.post<T>(this.baseURL + url, data);
-    //     return response.data;
-    // }
-
-    // private static async put<T>(url: string, data: any): Promise<T> {
-    //     const response: AxiosResponse<T> = await axios.put<T>(this.baseURL + url, data);
-    //     return response.data;
-    // }
-
-    // private static async delete<T>(url: string): Promise<T> {
-    //     const response: AxiosResponse<T> = await axios.delete<T>(this.baseURL + url);
-    //     return response.data;
-    // }
 }
 
 

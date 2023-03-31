@@ -9,12 +9,26 @@ export const Lista = styled.section<ListaProps>`
     display: flex;
     flex-direction: column;
     background: var(--branco);
-    border: solid 1px;
-    box-shadow: 0px 0px 4px #000000;
+    box-shadow: 0px 0px 15px 0.5px var(--verde-forte);
     border-radius: 50px;
-    width: ${props => props.tamanho === 'large' ? '70%' : '80%'};
-    height: ${props => props.tamanho === 'large' ? '50em' : '20em'};
-    margin: ${props => props.tamanho === 'large' ? '30px auto' : '20px 1px'};
+    width: ${props =>
+        props.tamanho === 'large'
+          ? '70%'
+          : props.tamanho === 'dashboard'
+          ? '60%'
+          : '80%'};
+      height: ${props =>
+        props.tamanho === 'large'
+          ? '50em'
+          : props.tamanho === 'dashboard'
+          ? '700px'
+          : '24em'};
+      margin: ${props =>
+        props.tamanho === 'large'
+          ? '30px auto'
+          : props.tamanho === 'dashboard'
+          ? '20px' 
+          : '20px 1px'};
     overflow: scroll;
 `;
 
@@ -40,7 +54,8 @@ export const HeadTipo = styled.div<ListaProps>`
 
 export const Item = styled(HeadLista)`
     background: transparent;
-    height: 3em;
+    height: 4.5em;
+    border-bottom: solid 1px var(--fundo-secundario);
 
     &:hover{
         background: var(--fundo);
@@ -48,6 +63,6 @@ export const Item = styled(HeadLista)`
 `;
 
 export const ItemTipo = styled(HeadTipo)`
+    border-right: none;
     
-
 `;

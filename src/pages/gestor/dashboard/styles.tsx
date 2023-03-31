@@ -2,6 +2,10 @@ import { createTheme } from "@mui/material/styles";
 import { Link, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Hcolor } from "../../../Components/texto";
+import 'react-date-range/dist/styles.css'; // importa o estilo padrão
+import 'react-date-range/dist/theme/default.css'; // importa o tema padrão
+import { DateRange } from 'react-date-range';
+
 
 
 //////////////////////////////////// Divisão
@@ -52,48 +56,12 @@ export const AddColaborador = styled.div`
 `;
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////// Lista Equipe DASHBOARD
-export const SectionEquipe = styled.section`
-    display: flex;
-    flex-direction: column;
-    background: var(--branco);
-    box-shadow: 0px 0px 15px 1px #BBFF84;
-    border-radius: 50px;
-    width: 60%;
-    height: 700px;
-    padding-top: 16px;
-    overflow: auto;
-`;
-
-export const DivColaborador = styled.div`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-around;
-    height: 60px;
-    padding: 24px 36px;
-    border-bottom: solid 1px var(--fundo);
-
-    &:hover{
-        background: var(--fundo);
-    }
-`;
-////////////////////////////////////////////////////////////
-
 ////////////////////////////////////////Calendário
-export const Theme = createTheme({
-    palette: {
-        primary: {
-            main: '#008000',
-        },
-        secondary: {
-            main: '#E1FFCA',
-        },
-        background: {
-            default: '#fff',
-        }
-    },
-});
+export const Calendario = styled(DateRange)`
+    border-radius: 36px;
+`;
+
+
 //////////////////////////////////////////
 
 ////////////////////////////////Filtros
@@ -157,7 +125,7 @@ interface StatusProps {
 
 // Filtros da página dashboard
 export function SectionStatus({ numDisp, numAceito, numFerias, numAtraso, numGeral }: StatusProps) {
-    const {id} = useParams();
+    const { id } = useParams();
     const localizacao = useLocation();
 
     return (
@@ -172,7 +140,7 @@ export function SectionStatus({ numDisp, numAceito, numFerias, numAtraso, numGer
                 <Link to={`/gestor/${id}/aceitos`}>
                     <DivStatusPequenos cor='amarelo'>
                         <Hcolor tamanho="21px" cor={localizacao.pathname === `/gestor/${id}/aceitos` ? 'var(--fundo)' : 'var(--branco)'}>Aceitos</Hcolor>
-                        <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}/aceitos`? 'var(--fundo)' : 'var(--branco)'}>{numAceito}</Hcolor>
+                        <Hcolor tamanho="42px" cor={localizacao.pathname === `/gestor/${id}/aceitos` ? 'var(--fundo)' : 'var(--branco)'}>{numAceito}</Hcolor>
                     </DivStatusPequenos>
                 </Link>
             </DivStatusDentro>

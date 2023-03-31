@@ -43,7 +43,7 @@ export function ColaboradorProvider ({children}: {children: JSX.Element[]})  {
             }
             fetchColaborador()
         }
-    }, [navigate, alert])
+    }, [navigate])
 
     return(
         <ColaboradorContext.Provider value={colaborador}>

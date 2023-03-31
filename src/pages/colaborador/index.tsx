@@ -20,7 +20,7 @@ export default function Colaborador() {
             navigate('/')
         }else{
             const m: any = jwtDecode(token)
-            if (localStorage.getItem('gestor') === "true") {
+            if (m.gestor === true) {
                 navigate(`/gestor/${m.matricula}`)
             }
         }

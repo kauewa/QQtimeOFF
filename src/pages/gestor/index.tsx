@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ContainerLateralGestor, Main } from "../../Components/Divisões/pg2";
 import { ListaProvider } from "../../context/contextGestor";
+import { MinhaSolicitacao } from "../minhaSolicitacao";
 import CadastrarColaborador from "./cadastro";
 import Dashboard from "./dashboard";
 import GestorColaborador from "./gColaborador";
@@ -22,7 +23,7 @@ export default function Gestor() {
             navigate('/')
         } else {
             const m: any = jwtDecode(token)
-            if (localStorage.getItem('gestor') === "false") {
+            if (m.gestor === false) {
                 navigate(`/colaborador/${m.matricula}`)
             }
         }
@@ -37,7 +38,8 @@ export default function Gestor() {
                 {localizacao.pathname === `/gestor/${id}/solicitacoes` ? (<Solicitacoes />) :
                     (localizacao.pathname === `/gestor/${id}/cadastro` ? (<CadastrarColaborador />) :
                         (localizacao.pathname === `/gestor/${id}/colaborador/${idcolaborador}` ? (<GestorColaborador />) :
-                            (localizacao.pathname === `/gestor/${id}/solicitacoes/${idsolicitacao}` ? (<Solicitacao />) : <Dashboard />)))}
+                            (localizacao.pathname === `/gestor/${id}/solicitacoes/${idsolicitacao}` ? (<Solicitacao />) : 
+                            (localizacao.pathname === `/gestor/${id}/perfil` ? <MinhaSolicitacao /> : <Dashboard />))))}
             </Main>
         </ListaProvider>
     )

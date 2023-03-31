@@ -1,14 +1,23 @@
+import isBetween from 'dayjs/plugin/isBetween';
 import { useContext } from "react";
 import { Cadastrar, Conteudo, DivColuna, DivHorizontal, Head } from "../../Components/Divisões/div";
 import { HeadLista, HeadTipo, Item, ItemTipo, Lista } from "../../Components/Divisões/lista";
 import { Hcolor, Hstatus } from "../../Components/texto";
-import { ColaboradorContext } from "../../context/contextColaborador";
+import { ColaboradorContext, Solicitacao } from "../../context/contextColaborador";
 import { DivStatusGrande } from "../gestor/dashboard/styles";
 import { CadastrarSolcitacao } from "./style";
 
 
 export function MinhaSolicitacao() {
     const colaborador = useContext(ColaboradorContext);
+
+    if(!colaborador){
+        return(
+            <h1>Colaborador não encontrado</h1>
+        )
+    }
+
+    const feriasNoAno: Solicitacao[] = colaborador.solicitacoes.filter((sol) => sol.status === "aprovado" && sol.inicio_ferias.isBetween(colaborador.fim_aquisitivo.subtract(1, 'year'), colaborador.fim_aquisitivo))
 
     const ListarSolicitacoes = () => {
         if (colaborador !== undefined) {
@@ -50,8 +59,8 @@ export function MinhaSolicitacao() {
             <Conteudo>
                 <Cadastrar>
                     <DivColuna tamanho=''>
-                        <Hstatus cor='Disponivel' tamanho='24px'>Dev Junior</Hstatus>
-                        <h1>CLT</h1>
+                        <Hstatus cor='Disponivel' tamanho='24px'>{colaborador.funcao.nome_funcao}</Hstatus>
+                        <h1>{colaborador.clt ? 'CLT' : 'PJ'}</h1>
                     </DivColuna>
                     <DivHorizontal tamanho='100%'>
                         <DivHorizontal tamanho='45%'>
@@ -75,11 +84,12 @@ export function MinhaSolicitacao() {
                             </Lista>
                         </DivHorizontal>
                         <DivHorizontal tamanho='45%'>
-                            <CadastrarSolcitacao />
+                            {/* Requisito 8 */}
+                            { feriasNoAno.length < 3 ? <CadastrarSolcitacao /> : <br/>}
                         </DivHorizontal>
                     </DivHorizontal>
                     <DivColuna tamanho=''>
-                        <h1>Fim periodo aquisitivo: 01/09/2023</h1>
+                        <h1>Fim periodo aquisitivo: {colaborador.fim_aquisitivo.format('DD/MM/YYYY')}</h1>
                     </DivColuna>
                 </Cadastrar>
             </Conteudo>

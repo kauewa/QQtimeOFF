@@ -18,7 +18,7 @@ export const Conteudo = styled.section`
     width: 80%;
     height: 44em;
     background-color: var(--branco);
-    box-shadow: 0px 0px 15px 1px #BBFF84;
+    box-shadow: 0px 0px 15px 0.5px var(--verde-forte);
     border-radius: 50px;
     margin: auto auto;
     padding: 30px 50px;

@@ -1,10 +1,9 @@
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Colaborador, ColaboradoresContext } from "../../../context/contextGestor";
+import { Colaborador, ColaboradoresContext, SolicitacoesContext } from "../../../context/contextGestor";
 import { H1, Hstatus } from "../../../Components/texto";
-import { MainDashboard, AddColaborador, DivColaborador, SectionEquipe, SectionStatus, Theme, DivTopo } from "./styles";
+import { MainDashboard, AddColaborador, SectionStatus, DivTopo, Calendario } from "./styles";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { ThemeProvider } from "@mui/material/styles";
 import { DivBranco } from "../../../Components/Divisões/div";
 import AddIcon from '@mui/icons-material/Add';
 import { SpeedDial } from "@mui/material";
@@ -16,6 +15,13 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Tooltip from "@mui/material/Tooltip";
 import { useContext } from "react";
+import dayjs, { Dayjs } from "dayjs";
+import ApiRelatorios from "../../../Relatorios";
+import { Item, ItemTipo, Lista } from "../../../Components/Divisões/lista";
+import { PerfilFoto } from "../../../Components/Divisões/pg2";
+
+
+
 
 //Dashboard
 export default function Dashboard() {
@@ -23,6 +29,23 @@ export default function Dashboard() {
     const localizacao = useLocation();
     const colaboradores = useContext(ColaboradoresContext)
     console.log(colaboradores)
+    const solicitacoes = useContext(SolicitacoesContext);
+    const solicitacoesAprovada = solicitacoes.filter((sol) => sol.status === "aprovado");
+
+
+    const listaSolicitacoesCalendario: any[] = []
+    solicitacoesAprovada.forEach((sol) => {
+        const cor = sol.inicio_ferias.isAfter(dayjs()) ? 'var(--amarelo-forte)' : 'var(--laranja)'
+
+        const datas: any = {
+            startDate: sol.inicio_ferias.toDate(),
+            endDate: sol.fim_ferias.toDate(),
+            color: cor,
+            key: sol.id.toString()
+        }
+        listaSolicitacoesCalendario.push(datas)
+    })
+
 
 
     // Tamanho da lista filtrada
@@ -33,7 +56,7 @@ export default function Dashboard() {
 
     //Relatórios
     const actions = [
-        { icon: <AssessmentIcon />, name: "Geral" },
+        { icon: <AssessmentIcon />, name: "Geral", onclick: async () => await ApiRelatorios.relatorioGeral(colaboradores, 'kaue.wa@gmail.com') },
         { icon: <AllInboxIcon />, name: "Histórico" },
         { icon: <AirplanemodeActiveIcon />, name: "Férias concedidas" },
         { icon: <AirplanemodeInactiveIcon />, name: "Férias acumuladas" }
@@ -48,32 +71,58 @@ export default function Dashboard() {
             const colaboradoresFiltrados: Colaborador[] = colaboradores.filter((item) => item.status === status)
 
             return (
-                <SectionEquipe>
+                <Lista tamanho="dashboard">
                     {colaboradoresFiltrados.map((item) => (
-                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }}>
-                            <DivColaborador key={item.id}>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.status}</Hstatus>
-                            </DivColaborador>
+                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }} key={item.id} >
+                            <Item key={item.id}>
+                                <ItemTipo tamanho="10%">
+                                    <PerfilFoto tamanho="60px" />
+                                </ItemTipo>
+                                <ItemTipo tamanho="20%">
+                                    <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
+                                </ItemTipo>
+                                <ItemTipo tamanho="35%">
+                                    <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
+                                </ItemTipo>
+                                <ItemTipo tamanho="35%">
+                                    <Hstatus tamanho="21px" cor={item.status}>{
+                                            item.status === 'Aceito' ? `${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.inicio_ferias.format('DD/MM/YYYY')} a ${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.fim_ferias.format('DD/MM/YYYY')}` :
+                                            item.status === 'Ferias' ? `Volta ${item.ferias?.fim_ferias.format('DD/MM/YYYY')}` : 
+                                            item.status === 'Atraso' ? `Vence ${item.fim_aquisitivo.format('DD/MM/YYYY')}`: item.status
+                                    }</Hstatus>
+                                </ItemTipo>
+                            </Item>
                         </Link>
                     ))}
-                </SectionEquipe>
+                </Lista>
             )
         } else {
             // sem filtro 
             return (
-                <SectionEquipe>
+                <Lista tamanho="dashboard">
                     {colaboradores.map((item) => (
-                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }}>
-                            <DivColaborador key={item.id}>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
-                                <Hstatus tamanho="21px" cor={item.status}>{item.status}</Hstatus>
-                            </DivColaborador>
+                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }} key={item.id}>
+                            <Item key={item.id}>
+                                <ItemTipo tamanho="10%">
+                                    <PerfilFoto tamanho="60px" />
+                                </ItemTipo>
+                                <ItemTipo tamanho="20%">
+                                    <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
+                                </ItemTipo>
+                                <ItemTipo tamanho="35%">
+                                    <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
+                                </ItemTipo>
+                                <ItemTipo tamanho="35%">
+                                    <Hstatus tamanho="21px" cor={item.status}>{
+                                        item.status === 'Aceito' ? `${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.inicio_ferias.format('DD/MM/YYYY')} a ${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.fim_ferias.format('DD/MM/YYYY')}` :
+                                            item.status === 'Ferias' ? `Volta ${item.ferias?.fim_ferias.format('DD/MM/YYYY')}` : 
+                                            item.status === 'Atraso' ? `Vence ${item.fim_aquisitivo.format('DD/MM/YYYY')}`: item.status
+                                    }</Hstatus>
+                                </ItemTipo>
+                            </Item>
                         </Link>
                     ))}
-                </SectionEquipe>
+                </Lista>
             )
         }
     }
@@ -98,11 +147,10 @@ export default function Dashboard() {
                 <div>
                     <SectionStatus numGeral={colaboradores.length} numDisp={numStatus('Disponivel')} numAceito={numStatus('Aceito')} numFerias={numStatus('Ferias')} numAtraso={numStatus('Atraso')} />
                     <DivBranco>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <ThemeProvider theme={Theme}>
-                                <DateCalendar />
-                            </ThemeProvider>
-                        </LocalizationProvider>
+                        <Calendario
+                            ranges={listaSolicitacoesCalendario}
+                            showDateDisplay={false}
+                        />
                     </DivBranco>
                 </div>
             </MainDashboard>
@@ -127,6 +175,7 @@ export default function Dashboard() {
                             key={action.name}
                             icon={action.icon}
                             tooltipTitle={action.name}
+                            onClickCapture={action.onclick}
                         />
                     ))}
                 </SpeedDial>
