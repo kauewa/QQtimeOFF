@@ -11,34 +11,45 @@ export const Lista = styled.section<ListaProps>`
     background: var(--branco);
     box-shadow: 0px 0px 15px 0.5px var(--verde-forte);
     border-radius: 50px;
+    overflow: auto;
     width: ${props =>
         props.tamanho === 'large'
-          ? '70%'
-          : props.tamanho === 'dashboard'
-          ? '60%'
-          : '80%'};
+            ? '70%'
+            : props.tamanho === 'dashboard'
+                ? '60%'
+                : '80%'};
       height: ${props =>
         props.tamanho === 'large'
-          ? '50em'
-          : props.tamanho === 'dashboard'
-          ? '700px'
-          : '24em'};
+            ? '50em'
+            : props.tamanho === 'dashboard'
+                ? '700px'
+                : '24em'};
       margin: ${props =>
         props.tamanho === 'large'
-          ? '30px auto'
-          : props.tamanho === 'dashboard'
-          ? '20px' 
-          : '20px 1px'};
-    overflow: scroll;
+            ? '30px auto'
+            : props.tamanho === 'dashboard'
+                ? '20px'
+                : '20px 1px'};
+
+        @media only screen and  (max-width: 600px) {
+            width: 90%;
+        }
+
+
+        ${props => props.tamanho === 'dashboard' || 'large' ? '@media only screen and (max-width: 600px) {height: 630px;}' : '@media only screen and (max-width: 600px) {display: none;}'}
+
+                
 `;
 
 export const HeadLista = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
-    height: 5em;
+    min-height: 5em;
     background: var(--fundo-secundario);
     border-bottom: solid 1px; 
+    position: sticky;
+    top: 0;
 
 `;
 
@@ -49,7 +60,8 @@ export const HeadTipo = styled.div<ListaProps>`
     width: ${props => props.tamanho};
     height: 100%;
     border-right: solid 1px;
-    overflow: auto;
+    overflow: hidden;
+    word-break: break-word;
 `;
 
 export const Item = styled(HeadLista)`
@@ -60,9 +72,15 @@ export const Item = styled(HeadLista)`
     &:hover{
         background: var(--fundo);
     }
+
+    overflow: auto;
+
+    @media only screen and (max-width: 600px) {
+        height: 6em;
+    }
+
 `;
 
 export const ItemTipo = styled(HeadTipo)`
     border-right: none;
-    
 `;

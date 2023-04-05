@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ApiService from "../../API";
+import ApiService from "../../API/RegrasDeNegocio";
 import { ButtonSmall } from "../../Components/botao";
 import { DivColuna, } from "../../Components/Divisões/div";
 import { Lista } from "../../Components/Divisões/lista";
@@ -22,13 +22,15 @@ export function CadastrarSolcitacao() {
     const [dt, setDt] = useState(false);
     const [loading, setLoading] = useState(false)
     const colaborador = useContext(ColaboradorContext)
+    const [resposta, setResposta] = useState('');
     const navigate = useNavigate();
 
+    
     const cadastrarSolcitacao = async () => {
         setLoading(true)
         if (id !== undefined && token !== null) {
             if (value !== null && dias >= 4) {
-                await ApiService.criarSolicitacao(id, dayjs().format('YYYY-MM-DD'), value.format("YYYY-MM-DD"), dias, value.add(dias, "day").format("YYYY-MM-DD"), dt, "", "pendente", "", token)
+                await ApiService.criarSolicitacao(id, dayjs().format('YYYY-MM-DD'), value.format("YYYY-MM-DD"), dias, value.add(dias, "day").format("YYYY-MM-DD"), dt, resposta, "pendente", "", token)
                 navigate('')
 
             } else if (dias < 4) {
@@ -67,6 +69,16 @@ export function CadastrarSolcitacao() {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDt(e.target.checked)}
                         inputProps={{ 'aria-label': 'controlled' }}
                     />
+                    <TextField
+                            multiline
+                            focused
+                            value={resposta}
+                            color="success"
+                            rows={2}
+                            onChange={(e: any) => setResposta(e.target.value)}
+                            label="Mensagem"
+                            placeholder="Mensagem"
+                        />
                     <ButtonSmall cor='' size='' onClick={async (e) => {
                         e.preventDefault()
                         await cadastrarSolcitacao()

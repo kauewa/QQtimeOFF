@@ -21,4 +21,8 @@ export const SectionInicio = styled.section`
     border-radius: 2rem;
     box-shadow: 0 0 20px 1px #bbff846c;
 
+    @media only screen and (max-width: 768px) {
+        padding: 50px 100px;
+    }
+
 `;

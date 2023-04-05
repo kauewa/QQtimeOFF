@@ -1,60 +1,29 @@
-import dayjs, { Dayjs } from "dayjs";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ApiService from "../../API";
-import { ColaboradorProvider, Solicitacao } from "../contextColaborador";
-
-export interface Funcao {
-  idfuncao: number;
-  nome_funcao: string
-}
-
-// Classe colaborador
-export interface Colaborador {
-  id: string;
-  nome: string;
-  cpf: string;
-  email: string;
-  inicio_contratacao: Dayjs;
-  fim_aquisitivo: Dayjs;
-  gestor: boolean;
-  clt: boolean;
-  saldo_ferias: number;
-  senha: string;
-  solicitacoes: Solicitacao[];
-  ferias: Solicitacao | null;
-  status: string;
-  funcao: Funcao;
-}
-
-export const setStatus = (colaborador: Colaborador) => {
-  if (colaborador.solicitacoes.find(c => c.status === "aprovado") && !colaborador.ferias) {
-    colaborador.status = 'Aceito'
-  } else if (colaborador.ferias) {
-    colaborador.status = 'Ferias'
-  } else if (colaborador.saldo_ferias > 0 && dayjs().isBetween(colaborador.fim_aquisitivo.subtract(2, 'month'), colaborador.fim_aquisitivo)) {
-    colaborador.status = 'Atraso'
-  } else {
-    colaborador.status = 'Disponivel'
-  }
-}
+import ApiService from "../../API/RegrasDeNegocio";
+import { ColaboradorProvider } from "../contextColaborador";
+import { Colaborador, Funcao, Solicitacao } from "../intefaces";
 
 
+//Contextos
 export const ColaboradoresContext = createContext<Colaborador[] | never[]>([])
 export const SolicitacoesContext = createContext<Solicitacao[] | never[]>([])
 export const FuncoesContext = createContext<Funcao[] | never[]>([])
 
 
 
+//Provider que ficará por volta de todos os componentes da navegação do gestor
 export function ListaProvider({ children }: { children: JSX.Element[] }) {
   const { id } = useParams();
   const token = localStorage.getItem('token');
+  const navigate = useNavigate()
+
+  //Atualiza os colaboradores, solicitações e funções
   const [colaboradores, setColaborares] = useState<Colaborador[]>([]);
   const [solicitacoes, setSolicitacoesPendentes] = useState<Solicitacao[]>([])
   const [funcoes, setFuncoes] = useState<Funcao[]>([])
-  const navigate = useNavigate()
 
-
+  // A cada atualização da página, o useEffect é chamado e atualiza os colaboradores, solicitações e funções
   useEffect(() => {
     if (id !== undefined && token !== null) {
       const fetchGestor = async () => {
@@ -69,13 +38,17 @@ export function ListaProvider({ children }: { children: JSX.Element[] }) {
     }
   }, [navigate])
 
+
   return (
     <FuncoesContext.Provider value={funcoes}>
       <ColaboradoresContext.Provider value={colaboradores}>
         <SolicitacoesContext.Provider value={solicitacoes}>
+
+          {/* Colaborador provider é para vizualizar as próprias solicitações de férias do gestor */}
           <ColaboradorProvider>
             {children}
           </ColaboradorProvider>
+
         </SolicitacoesContext.Provider>
       </ColaboradoresContext.Provider>
     </FuncoesContext.Provider>

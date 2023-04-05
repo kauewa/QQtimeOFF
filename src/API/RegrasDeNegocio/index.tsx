@@ -1,41 +1,48 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { enqueueSnackbar } from 'notistack';
-import { Solicitacao } from '../context/contextColaborador';
-import { Colaborador, Funcao, setStatus } from '../context/contextGestor';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import { Colaborador, Funcao, setStatus, Solicitacao } from '../../context/intefaces';
 
 class ApiService {
+
+    //BASE URL
     private static baseURL: string = 'http://localhost:3001';
     private static instance = axios.create({
         baseURL: this.baseURL,
     })
+
 
     //LOGIN
     static async login(Matricula: string, Senha: string) {
         try {
             const response = await this.instance.post('/auth/login', { matricula: Matricula, senha: Senha });
             localStorage.setItem('token', response.data.access_token)
-            if(response.data.access_token !== undefined){
+            if (response.data.access_token !== undefined) {
                 return response.data.access_token;
-            }  
-            enqueueSnackbar("Matrícula ou senha incorretos!", {variant: "error"})
-        } catch(e){
+            }
+            enqueueSnackbar("Matrícula ou senha incorretos!", { variant: "error" })
+
+        } catch (e) {
             console.error(e);
         }
     }
 
 
-    ///////////////////////////////////////////////////Métodos Gestor
+    //Métodos para capturar gestor
     static async getGestor(matricula: string, token: string): Promise<any> {
         try {
+            //Captura o gestor
             const response = await this.instance.get(`/colaborador/gestor/${matricula}`, { headers: { Authorization: 'Bearer ' + token } })
-            console.log(response.data)
             const dados = response.data.colaboradores;
+
+
+            //Listas para armazenar os objetos
             const colaboradores: Colaborador[] = []
             const solicitacoesLista: Solicitacao[] = []
             const funcoes: Funcao[] = []
 
 
+            //Preenche as listas
             dados.forEach((colab: any) => {
                 const solicitacoes: Solicitacao[] = []
                 let ferias: Solicitacao | null = null;
@@ -63,11 +70,9 @@ class ApiService {
                         status: sol.status
                     }
                     solicitacoes.push(solicitacao)
+                    solicitacoesLista.push(solicitacao)
 
-                    if (solicitacao.status === "pendente" || solicitacao.status === "aprovado") {
-                        solicitacoesLista.push(solicitacao)
-                    }
-
+                    //Verifica se o colaborador está de férias
                     if (solicitacao.status === "aprovado" && dayjs().isBetween(solicitacao.inicio_ferias, solicitacao.fim_ferias)) {
                         ferias = solicitacao;
                     }
@@ -106,6 +111,7 @@ class ApiService {
         }
     }
 
+
     static async criarColaborador(
         id: string,
         matricula: string,
@@ -136,13 +142,16 @@ class ApiService {
                 senha: senha,
                 funcao_idfuncao: funcao
             }
-            console.log(objeto)
+
+            //Cria o colaborador
             await this.instance.post(`/colaborador/${id}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
             enqueueSnackbar('Cadastro concluído', { variant: "success" })
+        
         } catch (e: any) {
             enqueueSnackbar(e.response.data.message, { variant: "error" })
         }
     }
+
 
 
     static async respostaSolicitacao(idsolicitacao: number, retorno: string, status: string, token: string) {
@@ -156,6 +165,7 @@ class ApiService {
 
 
 
+
     static async deletarColaborador(matriculaColaborador: string, token: string) {
         try {
             await this.instance.delete(`/colaborador/${matriculaColaborador}`, { headers: { Authorization: 'Bearer ' + token } })
@@ -164,29 +174,23 @@ class ApiService {
             enqueueSnackbar(e.response.data.message, { variant: 'error' })
         }
     }
-    //////////////////////////////////////////////////////////////////////////////////////////
+
+
+    static async atualizarColaborador(matricula: string, token: string, gestor: boolean, clt: boolean, funcao:number) {
+        try{
+            await this.instance.patch(`/colaborador/${matricula}`, {gestor: gestor, clt: clt, funcao_idfuncao: funcao}, { headers: { Authorization: 'Bearer ' + token } })
+            enqueueSnackbar("Colaborador atualizado!", { variant: "success" })
+        }catch(e: any){
+            enqueueSnackbar(e.response.data.message, { variant: "error" })
+        }
+        
+    }
+//////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ///////////////////////////////////////////////// Métodos colaborador
+    // Métodos colaborador
     static async criarSolicitacao(
         matricula: string,
         data_criacao: string,
@@ -211,6 +215,8 @@ class ApiService {
                 status: status,
                 retorno: retorno,
             }
+
+            //Cria a solicitação
             await this.instance.post(`/solicitacoes/${matricula}`, objeto, { headers: { Authorization: 'Bearer ' + token } })
             enqueueSnackbar("Solicitação enviada!", { variant: "success" })
         } catch (e: any) {
@@ -219,9 +225,13 @@ class ApiService {
 
     }
 
+
     static async getColaborador(matricula: string, token: string): Promise<Colaborador | undefined> {
         try {
+            //Pega o colaborador
             const response = await this.instance.get(`/colaborador/${matricula}`, { headers: { Authorization: 'Bearer ' + token } })
+            
+            //lista de solicitações
             const solicitacoes: Solicitacao[] = [];
             const colab = response.data;
             const funcao: Funcao = {
@@ -229,6 +239,7 @@ class ApiService {
                 nome_funcao: 'gestor'
             }
 
+            //preeche a lista de solicitações
             response.data.solicitacoes.forEach((sol: any) => {
                 const solicitacao: Solicitacao = {
                     id: sol.idsolicitacoes,
@@ -262,13 +273,9 @@ class ApiService {
                 solicitacoes: solicitacoes,
                 ferias: null
             }
-            console.log(colaborador)
 
+            setStatus(colaborador);
             return colaborador;
-
-
-
-
         } catch (e) {
             console.error('error')
         }
@@ -288,6 +295,8 @@ class ApiService {
             return e.response.data.message;
         }
     }
+
+
 
 }
 

@@ -53,12 +53,23 @@ export const AddColaborador = styled.div`
     &:hover{
         background: #016601;
     }
+
+    @media only screen and (max-width: 600px){
+        position: absolute;
+        bottom: 20,
+        right: 20,
+    }
+
 `;
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////Calendário
 export const Calendario = styled(DateRange)`
     border-radius: 36px;
+
+    @media only screen and (max-width: 600px){
+        display: none;
+    }
 `;
 
 
@@ -71,6 +82,10 @@ const DivStatus = styled.div`
     height: 350px;
     justify-content: space-between;
     width: 310px;
+
+    @media only screen and (max-width: 600px){
+        display: none;
+    }
 `;
 
 const DivStatusDentro = styled.div`

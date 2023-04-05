@@ -7,17 +7,18 @@ import { MinhaSolicitacao } from "../minhaSolicitacao";
 import CadastrarColaborador from "./cadastro";
 import Dashboard from "./dashboard";
 import GestorColaborador from "./gColaborador";
-import Solicitacao from "./solicitacao";
+import Solicitacao from "../solicitacao";
 import Solicitacoes from "./solicitacoes";
 
 
-//O centro de todo o gestor
+//Navegação do gestor
 export default function Gestor() {
     const { idcolaborador, id, idsolicitacao } = useParams();
     const localizacao = useLocation();
     const navigate = useNavigate()
     const token = localStorage.getItem('token');
 
+    //Privacidade de rotas
     useEffect(() => {
         if (!token) {
             navigate('/')
@@ -30,6 +31,7 @@ export default function Gestor() {
     }, [])
 
 
+
     return (
         <ListaProvider>
             <ContainerLateralGestor />
@@ -38,8 +40,9 @@ export default function Gestor() {
                 {localizacao.pathname === `/gestor/${id}/solicitacoes` ? (<Solicitacoes />) :
                     (localizacao.pathname === `/gestor/${id}/cadastro` ? (<CadastrarColaborador />) :
                         (localizacao.pathname === `/gestor/${id}/colaborador/${idcolaborador}` ? (<GestorColaborador />) :
-                            (localizacao.pathname === `/gestor/${id}/solicitacoes/${idsolicitacao}` ? (<Solicitacao />) : 
-                            (localizacao.pathname === `/gestor/${id}/perfil` ? <MinhaSolicitacao /> : <Dashboard />))))}
+                            (localizacao.pathname === `/gestor/${id}/solicitacoes/${idsolicitacao}` ? (<Solicitacao />) :
+                                (localizacao.pathname === `/gestor/${id}/perfil` ? <MinhaSolicitacao /> :
+                                    (localizacao.pathname === `/gestor/${id}/minhasolicitacao/${idsolicitacao}`) ? <Solicitacao /> : <Dashboard />))))}
             </Main>
         </ListaProvider>
     )

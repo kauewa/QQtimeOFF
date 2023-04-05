@@ -3,7 +3,7 @@ import Login from "./pages/login";
 import Gestor from "./pages/gestor";
 import Colaborador from "./pages/colaborador";
 
-//Pesquisar mais sobre as rotas, mas depois que tiver todo o resto pronto//////////////
+
 
 //Rotas
 function App() {
@@ -16,6 +16,7 @@ function App() {
         <Route path="/gestor/:id/perfil" element={<Gestor />} />
         <Route path="/gestor/:id/colaborador/:idcolaborador" element={<Gestor />} />
         <Route path="/gestor/:id/solicitacoes/:idsolicitacao" element={<Gestor />} />
+        <Route path="/gestor/:id/minhasolicitacao/:idsolicitacao" element={<Gestor />} />
         <Route path="/gestor/:id/cadastro" element={<Gestor />} />
         <Route path="/gestor/:id/disponiveis" element={<Gestor />} />
         <Route path="/gestor/:id/aceitos" element={<Gestor />} />
@@ -23,6 +24,7 @@ function App() {
         <Route path="/gestor/:id/atrasos" element={<Gestor />} />
         <Route path="/gestor/:id/solicitacoes" element={<Gestor />} />
         <Route path="/colaborador/:id" element={<Colaborador />} />
+        <Route path="/colaborador/:id/minhasolicitacao/:idsolicitacao" element={<Colaborador />} />
         <Route path="*" element={<h1>error</h1>} />
       </Routes>
     </BrowserRouter>

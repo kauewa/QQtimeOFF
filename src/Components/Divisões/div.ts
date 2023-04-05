@@ -22,6 +22,11 @@ export const Conteudo = styled.section`
     border-radius: 50px;
     margin: auto auto;
     padding: 30px 50px;
+
+    @media only screen and (max-width: 600px) {
+        width: 90%;
+        padding: 30px 1px;
+    }
 `;
 ////////////////////////////////////////////
 

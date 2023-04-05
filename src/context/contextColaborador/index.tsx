@@ -1,34 +1,22 @@
-import { Dayjs } from "dayjs";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ApiService from "../../API";
-import Solicitacao from "../../pages/gestor/solicitacao";
-import { Colaborador } from "../contextGestor";
+import ApiService from "../../API/RegrasDeNegocio";
+import { Colaborador } from "../intefaces";
 
 
-
-export interface Solicitacao{
-    id: number;
-    idSolicitante: string;
-    data_criacao: Dayjs;
-    inicio_ferias: Dayjs;
-    qtd_dias: number;
-    fim_ferias: Dayjs;
-    decimo_terceiro: boolean;
-    comentario: string;
-    retorno: string;
-    status: string;
-}
-
+//Contexto do colaborador
 export const ColaboradorContext = createContext<Colaborador | undefined>(undefined)
 
-
+//Provider que ficará por volta de todos os componentes da navegação do colaborador
 export function ColaboradorProvider ({children}: {children: JSX.Element[]})  {
     const { id } = useParams();
     const token = localStorage.getItem('token');
-    const [colaborador, setColaborador] = useState<Colaborador | undefined>(undefined);
     const navigate = useNavigate();
 
+    //Atualiza o colaborador
+    const [colaborador, setColaborador] = useState<Colaborador | undefined>(undefined);
+    
+    // A cada atualização da página, o useEffect é chamado e atualiza o colaborador
     useEffect(() => {
         if (id !== undefined && token !== null) {
             const fetchColaborador = async () => {
@@ -45,6 +33,7 @@ export function ColaboradorProvider ({children}: {children: JSX.Element[]})  {
         }
     }, [navigate])
 
+    
     return(
         <ColaboradorContext.Provider value={colaborador}>
             {children}
@@ -55,6 +44,3 @@ export function ColaboradorProvider ({children}: {children: JSX.Element[]})  {
 
 
 
-
-
-export const solicitacoes: Solicitacao[] = [];

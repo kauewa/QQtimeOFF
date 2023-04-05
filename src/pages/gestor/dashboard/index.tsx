@@ -1,24 +1,24 @@
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Colaborador, ColaboradoresContext, SolicitacoesContext } from "../../../context/contextGestor";
-import { H1, Hstatus } from "../../../Components/texto";
+import { ColaboradoresContext, SolicitacoesContext } from "../../../context/contextGestor";
+import { H1 } from "../../../Components/texto";
 import { MainDashboard, AddColaborador, SectionStatus, DivTopo, Calendario } from "./styles";
-import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DivBranco } from "../../../Components/Divisões/div";
 import AddIcon from '@mui/icons-material/Add';
 import { SpeedDial } from "@mui/material";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
-import AllInboxIcon from '@mui/icons-material/AllInbox';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Tooltip from "@mui/material/Tooltip";
 import { useContext } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import ApiRelatorios from "../../../Relatorios";
-import { Item, ItemTipo, Lista } from "../../../Components/Divisões/lista";
-import { PerfilFoto } from "../../../Components/Divisões/pg2";
+import dayjs from "dayjs";
+import ApiRelatorios from "../../../API/Relatorios";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { ListarColaboradores } from "./listagem";
+import { Colaborador } from "../../../context/intefaces";
+import { ColaboradorContext } from "../../../context/contextColaborador";
 
 
 
@@ -28,10 +28,16 @@ export default function Dashboard() {
     const { id } = useParams()
     const localizacao = useLocation();
     const colaboradores = useContext(ColaboradoresContext)
-    console.log(colaboradores)
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const colaborador = useContext(ColaboradorContext)
+    const emailGestor: string = colaborador?.email !== undefined ? colaborador.email : 'kaue.wa@gmail.com';
+    
+    
+    
+/////// display calendario
     const solicitacoes = useContext(SolicitacoesContext);
     const solicitacoesAprovada = solicitacoes.filter((sol) => sol.status === "aprovado");
-
 
     const listaSolicitacoesCalendario: any[] = []
     solicitacoesAprovada.forEach((sol) => {
@@ -45,6 +51,7 @@ export default function Dashboard() {
         }
         listaSolicitacoesCalendario.push(datas)
     })
+/////////////////////////////////
 
 
 
@@ -54,79 +61,14 @@ export default function Dashboard() {
         return colaboradoresFiltrados.length;
     }
 
+
     //Relatórios
     const actions = [
-        { icon: <AssessmentIcon />, name: "Geral", onclick: async () => await ApiRelatorios.relatorioGeral(colaboradores, 'kaue.wa@gmail.com') },
-        { icon: <AllInboxIcon />, name: "Histórico" },
-        { icon: <AirplanemodeActiveIcon />, name: "Férias concedidas" },
-        { icon: <AirplanemodeInactiveIcon />, name: "Férias acumuladas" }
+        { icon: <AssessmentIcon />, name: "Geral", onclick: async () => await ApiRelatorios.relatorioGeral(colaboradores, emailGestor) },
+        { icon: <AirplanemodeActiveIcon />, name: "Férias concedidas", onclick: async () => await ApiRelatorios.relatorioFerias(colaboradores, emailGestor) },
+        { icon: <AirplanemodeInactiveIcon />, name: "Férias acumuladas", onclick: async () => await ApiRelatorios.relatorioAtrasos(colaboradores, emailGestor) }
     ]
 
-
-    /////////////////////////////////////////////////////    // função para listar colaboradores existentes no front
-    const ListarColaboradores = (status: string) => {
-        // Verificação de filtro
-        if (status !== '') {
-            // filtro de colaboradores
-            const colaboradoresFiltrados: Colaborador[] = colaboradores.filter((item) => item.status === status)
-
-            return (
-                <Lista tamanho="dashboard">
-                    {colaboradoresFiltrados.map((item) => (
-                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }} key={item.id} >
-                            <Item key={item.id}>
-                                <ItemTipo tamanho="10%">
-                                    <PerfilFoto tamanho="60px" />
-                                </ItemTipo>
-                                <ItemTipo tamanho="20%">
-                                    <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
-                                </ItemTipo>
-                                <ItemTipo tamanho="35%">
-                                    <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
-                                </ItemTipo>
-                                <ItemTipo tamanho="35%">
-                                    <Hstatus tamanho="21px" cor={item.status}>{
-                                            item.status === 'Aceito' ? `${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.inicio_ferias.format('DD/MM/YYYY')} a ${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.fim_ferias.format('DD/MM/YYYY')}` :
-                                            item.status === 'Ferias' ? `Volta ${item.ferias?.fim_ferias.format('DD/MM/YYYY')}` : 
-                                            item.status === 'Atraso' ? `Vence ${item.fim_aquisitivo.format('DD/MM/YYYY')}`: item.status
-                                    }</Hstatus>
-                                </ItemTipo>
-                            </Item>
-                        </Link>
-                    ))}
-                </Lista>
-            )
-        } else {
-            // sem filtro 
-            return (
-                <Lista tamanho="dashboard">
-                    {colaboradores.map((item) => (
-                        <Link to={{ pathname: `/gestor/${id}/colaborador/${item.id}` }} key={item.id}>
-                            <Item key={item.id}>
-                                <ItemTipo tamanho="10%">
-                                    <PerfilFoto tamanho="60px" />
-                                </ItemTipo>
-                                <ItemTipo tamanho="20%">
-                                    <Hstatus tamanho="21px" cor={item.status}>{item.nome}</Hstatus>
-                                </ItemTipo>
-                                <ItemTipo tamanho="35%">
-                                    <Hstatus tamanho="21px" cor={item.status}>{item.funcao.nome_funcao}</Hstatus>
-                                </ItemTipo>
-                                <ItemTipo tamanho="35%">
-                                    <Hstatus tamanho="21px" cor={item.status}>{
-                                        item.status === 'Aceito' ? `${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.inicio_ferias.format('DD/MM/YYYY')} a ${item.solicitacoes.find((sol) => sol.status === 'aprovado' && sol.inicio_ferias.isAfter(dayjs()))?.fim_ferias.format('DD/MM/YYYY')}` :
-                                            item.status === 'Ferias' ? `Volta ${item.ferias?.fim_ferias.format('DD/MM/YYYY')}` : 
-                                            item.status === 'Atraso' ? `Vence ${item.fim_aquisitivo.format('DD/MM/YYYY')}`: item.status
-                                    }</Hstatus>
-                                </ItemTipo>
-                            </Item>
-                        </Link>
-                    ))}
-                </Lista>
-            )
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     return (
@@ -140,10 +82,10 @@ export default function Dashboard() {
                 </Link>
             </DivTopo>
             <MainDashboard>
-                {localizacao.pathname === `/gestor/${id}/disponiveis` ? ListarColaboradores('Disponivel') :
-                    (localizacao.pathname === `/gestor/${id}/aceitos` ? ListarColaboradores('Aceito') :
-                        (localizacao.pathname === `/gestor/${id}/ferias` ? ListarColaboradores('Ferias') :
-                            (localizacao.pathname === `/gestor/${id}/atrasos` ? ListarColaboradores('Atraso') : ListarColaboradores(''))))}
+                {localizacao.pathname === `/gestor/${id}/disponiveis` ? ListarColaboradores(colaboradores ,'Disponivel') :
+                    (localizacao.pathname === `/gestor/${id}/aceitos` ? ListarColaboradores(colaboradores ,'Aceito') :
+                        (localizacao.pathname === `/gestor/${id}/ferias` ? ListarColaboradores(colaboradores ,'Ferias') :
+                            (localizacao.pathname === `/gestor/${id}/atrasos` ? ListarColaboradores(colaboradores ,'Atraso') : ListarColaboradores(colaboradores ,''))))}
                 <div>
                     <SectionStatus numGeral={colaboradores.length} numDisp={numStatus('Disponivel')} numAceito={numStatus('Aceito')} numFerias={numStatus('Ferias')} numAtraso={numStatus('Atraso')} />
                     <DivBranco>
@@ -158,6 +100,7 @@ export default function Dashboard() {
                 <SpeedDial
                     ariaLabel="Relatórios"
                     sx={{
+                        display: isMobile ? 'none' : '',
                         position: 'absolute',
                         bottom: 20,
                         right: 20,

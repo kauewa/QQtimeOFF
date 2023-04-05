@@ -18,5 +18,8 @@ transition: 500ms;
 &:hover{
     cursor: pointer;
     box-shadow: ${props => props.cor === 'laranja' ? '0 0 8px var(--laranja)' : '0 0 8px var(--verde-forte)'};
-}`;
+}
+
+
+`;
 
