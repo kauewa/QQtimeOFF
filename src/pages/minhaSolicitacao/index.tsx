@@ -39,7 +39,6 @@ export function MinhaSolicitacao() {
                 <Cadastrar>
                     {isMobile ? '' :
                         <DivColuna tamanho=''>
-                            <Hstatus cor='Disponivel' tamanho='24px'>{colaborador.funcao.nome_funcao}</Hstatus>
                             <h1>{colaborador.clt ? 'CLT' : 'PJ'}</h1>
                         </DivColuna>}
                     <DivHorizontal tamanho='100%'>

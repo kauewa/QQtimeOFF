@@ -58,7 +58,7 @@ export default function Solicitacao() {
             <Head>
                 <H1>{colaborador?.nome}</H1>
                 <DivColuna tamanho="">
-                    <Hstatus tamanho="35px" cor="Disponivel">Dev</Hstatus>
+                    <Hstatus tamanho="35px" cor="Disponivel">{colaborador?.funcao.nome_funcao}</Hstatus>
                     <h1>{colaborador?.clt ? "CLT" : "PJ"}</h1>
                 </DivColuna>
             </Head>

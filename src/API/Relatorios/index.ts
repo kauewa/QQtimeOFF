@@ -75,17 +75,6 @@ class ApiRelatorios {
 
     }
 
-    // static async relatorioChat(colaboradores: Colaborador[]) {
-    //     try {
-    //         const colaborador = colaboradores.filter((colab) => colab.status === 'Aceito')
-    //         const objeto = {
-    //             lista: colaborador
-    //         }
-    //         await this.instance.post('/chat', objeto)
-    //     }catch(e){
-    //         console.error(e)
-    //     }
-    // }
 
 
 

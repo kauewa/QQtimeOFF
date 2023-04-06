@@ -38,10 +38,10 @@ export interface Solicitacao {
 
 //Status para melhor vizualização da situacao do colaborador
 export const setStatus = (colaborador: Colaborador) => {
-  if (colaborador.solicitacoes.find(c => c.status === "aprovado") && !colaborador.ferias) {
-    colaborador.status = 'Aceito'
-  } else if (colaborador.ferias) {
+  if (colaborador.ferias) {
     colaborador.status = 'Ferias'
+  } else if (colaborador.solicitacoes.find(c => c.status === "aprovado" && c.inicio_ferias.isAfter(dayjs())) ) {
+    colaborador.status = 'Aceito'
   } else if (colaborador.saldo_ferias > 0 && dayjs().isBetween(colaborador.fim_aquisitivo.subtract(2, 'month'), colaborador.fim_aquisitivo)) {
     colaborador.status = 'Atraso'
   } else {

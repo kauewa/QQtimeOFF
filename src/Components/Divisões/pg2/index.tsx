@@ -72,6 +72,10 @@ const CardPerfil = styled.section`
     border-radius: 30px;
     background-color: var(--fundo-secundario);
 
+    &:hover{
+        box-shadow: 0px 0px 15px 1px var(--verde-forte);
+    }
+
     @media only screen and (max-width: 600px){
         width: 270px;
         height: 350px;
