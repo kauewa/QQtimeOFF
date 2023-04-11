@@ -76,6 +76,7 @@ export default function CadastrarColaborador() {
 
       }
     }
+    
     setLoading(false)
   };
 
@@ -141,10 +142,10 @@ export default function CadastrarColaborador() {
           <h1>Tipo de contrato</h1>
           <RadioGroup
             row
-
+            defaultValue={"1"}
             onChange={(e) => setClt((e.target.value === "1"))}
           >
-            <FormControlLabel value={"1"} control={<Radio />} label="CLT" />
+            <FormControlLabel value={"1"} control={<Radio />} label="CLT"/>
             <FormControlLabel value={"0"} control={<Radio />} label="PJ" />
 
           </RadioGroup>

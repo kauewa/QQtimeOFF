@@ -17,7 +17,7 @@ export default function ListarSolicitações(colaboradores: Colaborador[], solic
 
                 if (colaborador) {
                     // procura os colaboradores que tem a mesma função do colaborador que fez a solicitação e que estão com o status aceito (observação)
-                    const colaboradoresRelacionados: Colaborador[] = colaboradores.filter((colab) => colab.funcao.idfuncao === colaborador.funcao.idfuncao && colab.status === "Aceito")
+                    const colaboradoresRelacionados: Colaborador[] = colaboradores.filter((colab) => colab.funcao.idfuncao === colaborador.funcao.idfuncao && colab.status === "Aceito" && colab.id !== colaborador.id)
                     
 
                     return (

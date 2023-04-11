@@ -118,7 +118,7 @@ export default function Solicitacao() {
                             </DivHorizontal>}
 
                     <DivHorizontal tamanho="">
-                        {solicitacao.status === "pendente" ?
+                        {solicitacao.status === "pendente" && !minhaSolicitacao ?
                             <>
                                 <ButtonSmall cor='laranja' size='' onClick={() => retorno('reprovado')}>Recusar</ButtonSmall>
                                 <ButtonSmall cor='' size='' onClick={() => retorno('aprovado')}>Aceitar</ButtonSmall>
