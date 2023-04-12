@@ -64,8 +64,6 @@ Ao ter as férias aprovadas, o sistema deverá marcar automaticamente os comprom
 # RQ014 - Relatório Analítico em CSV ou XLSX
 O gestor deverá ter a opção de emitir um relatório analítico com os dados referentes às férias do seu time, em formato CSV ou XLSX, para facilitar a análise e acompanhamento das informações.
 
-# RQ015 - Notificação por Workspace
-Além das notificações por e-mail, a aplicação deverá enviar uma notificação via API do Workspace (Google Workspace) para o gestor quando um colaborador solicitar férias para aprovação. A aplicação utilizará a linguagem Python para consumir a API.
 
 
 ## Considerações Finais
